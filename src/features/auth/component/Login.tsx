@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import "../../../App.css"
-import "../../user/style/Form.css"
-import { useNavigate } from "react-router-dom";
+import "../../../App.css";
+import "../../user/style/Form.css";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useLoggedInUserContext } from "@/features/user/hooks";
+import { logInUser } from "@/api/authApi";
 
 export function Login() {
-  console.log("hello in log in");
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,23 +17,14 @@ export function Login() {
     formData.append("email", email);
     formData.append("password", password);
     try {
-      const response = await fetch("http://localhost:4000/user/loginUser", {
-        method: "POST",
-        body: formData,
-        credentials: "include",
-      });
-      if (response.status === 200) {
-        const data = await response.json();
-        setLoggedInUser(data.data.userData);
-        navigate("/users");
-      } else {
-        const data = await response.json();
-        alert(data.message);
-      }
+      const response = await logInUser(formData);
+      setLoggedInUser(await response.data.data.userData);
+      navigate("/users")
     } catch (error) {
       alert(error);
     }
   };
+
 
   return (
     <div className="bg--200 flex justify-center items-center min-h-screen">

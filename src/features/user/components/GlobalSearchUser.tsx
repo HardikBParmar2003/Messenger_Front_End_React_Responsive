@@ -1,3 +1,4 @@
+import { findUser } from "@/api/handler";
 import { useSelectedUserContext } from "@/features/chat/hooks";
 import { useEffect, useState, type FC } from "react";
 
@@ -10,7 +11,7 @@ interface User {
 export const GlobalSearchUser: FC = () => {
   const [userName, setUserName] = useState("");
   const [serachUsers, setSearchUsers] = useState<User[]>([]);
-  const {setSelectedUser} = useSelectedUserContext();
+  const { setSelectedUser } = useSelectedUserContext();
 
   useEffect(() => {
     async function fetchUsers() {
@@ -22,17 +23,11 @@ export const GlobalSearchUser: FC = () => {
           sortBy: "first_name",
           sortType: "desc",
         });
-
-        const response = await fetch(
-          `http://localhost:4000/user/findUser?${params.toString()}`,
-          {
-            method: "POST",
-            credentials: "include",
-          }
-        );
-        if (response.status == 200) {
-          const data = await response.json();
-          setSearchUsers(data.data);
+        const response = await findUser(params.toString());
+        if (response.data.data) {
+          setSearchUsers(response.data.data);
+        } else {
+          setSearchUsers([]);
         }
       } catch (error) {
         alert(error);
@@ -51,7 +46,6 @@ export const GlobalSearchUser: FC = () => {
         type="text"
         placeholder="Search users to start chat"
         className="input"
-
         value={userName}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           setUserName(e.target.value)
@@ -62,11 +56,19 @@ export const GlobalSearchUser: FC = () => {
         {serachUsers.length > 0 ? (
           serachUsers.map((user: User) => (
             <li key={user.user_id} className="user-list w-[280px] flex p-1.5">
-              <img src={user.profile_photo} className="user-profile-image cursor-pointer w-8 h-8 rounded-full" />
+              <img
+                src={user.profile_photo}
+                className="user-profile-image cursor-pointer w-8 h-8 rounded-full"
+              />
               <span className="user-name w-[290px] ">
                 {user.first_name + " " + user.last_name}
               </span>
-              <button className="bg-gray-300 rounded-md p-1.5 ml-10 cursor-pointer hover:ring-2 hover:ring-blue-500" onClick={()=>setSelectedUser(user)}>Chat</button>
+              <button
+                className="bg-gray-300 rounded-md p-1.5 ml-10 cursor-pointer hover:ring-2 hover:ring-blue-500"
+                onClick={() => setSelectedUser(user)}
+              >
+                Chat
+              </button>
             </li>
           ))
         ) : (
@@ -75,5 +77,4 @@ export const GlobalSearchUser: FC = () => {
       </ul>
     </div>
   );
-}
-
+};

@@ -1,8 +1,8 @@
 import axios from "axios";
 
-
 export const api = axios.create({
-  baseURL: "http://localhost:4000/",
+  baseURL: "http://localhost:4000",
+  withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
@@ -11,11 +11,6 @@ api.interceptors.request.use((config) => {
 
 api.interceptors.response.use(
   (response) => {
-    if (response.status == 200) {
-      alert("Sucess");
-    } else if (response.status == 204) {
-      alert("No content to show");
-    }
     return response;
   },
   (error) => {

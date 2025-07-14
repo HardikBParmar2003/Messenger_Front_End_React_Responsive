@@ -1,7 +1,10 @@
-import axios from "axios";
+import { api } from "./axios";
 
-export const fetchChatData = () => {
-  return axios.get(`http://localhost:4000/chat/userChat/${user_id}`, {
-    withCredentials: true,
-  });
+export const fetchChatData = (user_id:number) => {
+  return api.get(`/chat/userChat/${user_id}`);
 };
+
+
+export const chattingUsers = () => {
+    return api.get("chat/getAllChattingUser");
+  };

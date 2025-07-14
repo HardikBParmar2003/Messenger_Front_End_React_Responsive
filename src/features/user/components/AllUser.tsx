@@ -3,6 +3,7 @@ import { useEffect, useState, type FC } from "react";
 import {GlobalSearchUser, LocalSearchUser} from "./index";
 import {LoggedInUserComponent} from "../hooks";
 import { Chat } from "../../chat/components/index";
+import { chattingUsers } from "@/api/handler";
 
 export const AllUser: FC = () => {
   interface User {
@@ -18,21 +19,11 @@ export const AllUser: FC = () => {
   useEffect(() => {
     async function fetchUsers() {
       try {
-        const response = await fetch(
-          "http://localhost:4000/chat/getAllChattingUser",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
-        if (response.status == 200) {
-          const data = await response.json();
-          console.log("fetched user chat is:",data);
-          setUsers(data.data);
-        } else {
-          const err = await response.json();
-
-          alert(err);
+        const response = await chattingUsers()
+        if(response.data.data){
+          setUsers(response.data.data);
+        }else{
+          setUsers([])
         }
       } catch (err: any) {
         setError(err.message);

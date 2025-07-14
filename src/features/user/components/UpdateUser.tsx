@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useForm } from 'react-hook-form';
-import "../style/Form.css"
+import { useForm } from "react-hook-form";
+import "../style/Form.css";
 import { useLoggedInUserContext } from "../hooks";
+import { updateUser } from "@/api/handler";
 
 export function UpdateUser() {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
 
-  const { loggedInUser,setLoggedInUser } = useLoggedInUserContext();
+  const { loggedInUser, setLoggedInUser } = useLoggedInUserContext();
   const [profile, setProfile] = useState(loggedInUser?.profile_photo);
 
   const handleProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,7 +21,6 @@ export function UpdateUser() {
         file.type.includes("jpeg")
       ) {
         const imageUrl = URL.createObjectURL(file);
-        console.log("image url is:", imageUrl);
         setProfile(imageUrl);
       } else {
         alert("Upload Jpeg,png or jpg format file...");
@@ -29,7 +29,6 @@ export function UpdateUser() {
   };
 
   async function updateUserData(data: any) {
-    console.log("hello", data);
     try {
       const formData = new FormData();
       formData.append("first_name", data.first_name);
@@ -37,28 +36,9 @@ export function UpdateUser() {
       if (data.profile.length > 0) {
         formData.append("profile", data.profile[0]);
       }
-
-      console.log("form data is:", formData);
-      console.log("before fetch");
-      const response = await fetch(
-        "http://localhost:4000/user/updateUserDetails",
-        {
-          method: "PUT",
-          body: formData,
-          credentials: "include",
-        }
-      );
-      if (response.status == 200) {
-        const data = await response.json()
-        console.log("logged in user",data.data);
-        setLoggedInUser(data.data)
-        navigate("/users")
-        
-      } else if (response.status === 204) {
-        alert("Nothing to update");
-      } else {
-        alert("in else");
-      }
+      const response = await updateUser(formData);
+      setLoggedInUser(response.data.data);
+      navigate("/users");
     } catch (error) {
       throw error;
     }
@@ -118,6 +98,3 @@ export function UpdateUser() {
     </div>
   );
 }
-
-
-

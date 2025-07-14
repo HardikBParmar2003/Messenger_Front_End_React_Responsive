@@ -1,3 +1,4 @@
+import { individualUser } from "@/api/handler";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
@@ -5,8 +6,8 @@ interface User {
   first_name?: string;
   last_name?: string;
   profile_photo?: string;
-  email?:string;
-  password?:string
+  email?: string;
+  password?: string;
 }
 
 interface loggedInUserType {
@@ -24,27 +25,24 @@ export function LoggedInUserContextProvider({ children }: any) {
   useEffect(() => {
     async function isUSer() {
       try {
-        const response = await fetch("http://localhost:4000/user/getIndividualUser", {
-          method: "GET",
-          credentials: "include",
-        });
-        if (response.status == 200) {
-          const data = await response.json();
-          console.log("user data is:", data.data);
-          setLoggedInUser(data.data);
+        const response = await individualUser();
+        if (response.data.data) {
+          setLoggedInUser(response.data.data);
         } else {
           setLoggedInUser(null);
         }
       } catch (error) {
         setLoggedInUser(null);
-      }finally{
-        setLoading(false)
+      } finally {
+        setLoading(false);
       }
     }
-    isUSer()
+    isUSer();
   }, []);
   return (
-    <LoggedInUserContext.Provider value={{ loggedInUser, setLoggedInUser,  loading }}>
+    <LoggedInUserContext.Provider
+      value={{ loggedInUser, setLoggedInUser, loading }}
+    >
       {children}
     </LoggedInUserContext.Provider>
   );

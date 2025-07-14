@@ -3,7 +3,6 @@ import { useLoggedInUserContext } from "./index"
 export function LoggedInUserComponent(){
     const navigate = useNavigate()
     const {loggedInUser} = useLoggedInUserContext()
-    console.log("logged in user is:",loggedInUser);
     return (
         <div className="flex p-2 mb-5 ml-[40px] bg-gray-200 rounded-2xl border border-gray-800">
         <img

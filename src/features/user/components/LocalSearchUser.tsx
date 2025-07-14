@@ -13,7 +13,6 @@ interface LocalSearchUserProps {
 export function LocalSearchUser({ users }: LocalSearchUserProps) {
   const [searchValue, setSearchValue] = useState("");
   const {setSelectedUser,selectedUser} = useSelectedUserContext();
-  console.log("users is:",users);
   const filteredUsers = useMemo(() => {
     return users.filter((user) =>
       (user.first_name + " " + user.last_name)

@@ -54,23 +54,17 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
       socket.emit("send message", sender_id, receiver_id, message);
 
       inputMessageRef.current.value = "";
-      console.log("sent message");
     }
   }
 
   useEffect(() => {
-    console.log("selected user is:", selectedUser);
 
     socket.on("send message back", (data: Chat) => {
-      console.log("received data is:", data);
       if (
         selectedUser?.user_id == data.receiver_id ||
         selectedUser?.user_id == data.sender_id
       ) {
         setAllMessages((prev) => [...prev, data]);
-        console.log("chat data is:", data);
-        console.log("all message is:", allMessages);
-        console.log("selected user is:", selectedUser);
       }
     });
 

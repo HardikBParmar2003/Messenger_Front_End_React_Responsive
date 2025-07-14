@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useLoggedInUserContext } from "../../user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { ShowChatData } from "./index";
+import { fetchChatData } from "@/api/handler";
 
 export function Chat() {
   const { selectedUser, setSelectedUser } = useSelectedUserContext();
@@ -16,18 +17,15 @@ export function Chat() {
     const user_id: number = Number(selectedUser?.user_id);
     async function FetchChatData() {
       try {
-        const response = await fetch(
-          `http://localhost:4000/chat/userChat/${user_id}`,
-          {
-            method: "GET",
-            credentials: "include",
+        console.log("user id:", user_id);
+        if (user_id) {
+          const response = await fetchChatData(user_id);
+          console.log("response is", response.data.data.length);
+          if (response.data.data.length > 0) {
+            setChatData(response.data.data);
+          }else{
+            setChatData([])
           }
-        );
-        if (response.status == 200) {
-          const data = await response.json();
-          setChatData(data.data);
-        } else {
-          setChatData([]);
         }
       } catch (error) {
         setChatData([]);

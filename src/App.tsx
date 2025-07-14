@@ -5,9 +5,7 @@ import { Login, LogOut, Signup } from "./features/auth/component/index";
 import { AllUser, UpdateUser } from "./features/user/components";
 
 export const App: FC = () => {
-  console.log("hello in app");
   const { loggedInUser, loading } = useLoggedInUserContext();
-  console.log("loged in user is:", loggedInUser);
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">

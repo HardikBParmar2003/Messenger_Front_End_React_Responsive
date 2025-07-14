@@ -1,21 +1,15 @@
 import type { User } from "@/interface/interface";
-import axios from "axios";
+import { api } from "./axios";
 
 
-export const logInUser = (data: User) => {
-  return axios.post("user/loginUser", data, {
-    withCredentials: true,
-  });
+export const logInUser = (data: FormData) => {
+  return api.post("/user/loginUser", data); // No need to send cookie
 };
 
 export const logOutUser = () => {
-  return axios.get("user/user/logOutUser", {
-    withCredentials: true,
-  });
+  return api.delete("/user/logOutUser");
 };
 
 export const signUpUser = (data: User) => {
-  return axios.post("user/loginUser", data, {
-    withCredentials: true,
-  });
+  return api.post("/user/loginUser", data,);
 };
