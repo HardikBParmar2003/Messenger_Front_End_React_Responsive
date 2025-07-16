@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import "../../../App.css";
 import "../../user/style/Form.css";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLoggedInUserContext } from "@/features/user/hooks";
-import { logInUser } from "@/api/authApi";
+import { logInUser } from "@/api/auth.api";
 
 export function Login() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export function Login() {
   const [password, setPassword] = useState("");
   const { setLoggedInUser } = useLoggedInUserContext();
 
-  const handleSubmit = async (e: { preventDefault: () => void }) => {
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("email", email);
@@ -29,7 +29,7 @@ export function Login() {
   return (
     <div className="bg--200 flex justify-center items-center min-h-screen">
       <form onSubmit={handleSubmit}>
-        <h1 className="text-4xl font-bold mb-5 text-center">Log In</h1>
+        <h3 className="text-4xl font-bold mb-5 text-center">Log In</h3>
         <div>
           <label htmlFor="email">Email:</label>
           <input
@@ -55,6 +55,7 @@ export function Login() {
           />
         </div>
         <button type="submit">Log In</button>
+      <Link to="/newUser">New User ?</Link>
       </form>
     </div>
   );

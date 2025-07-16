@@ -50,7 +50,6 @@ export function UpdateUser() {
         <div className="">
           <img
             src={profile}
-            alt=""
             className="w-[180px] h-[150px] rounded-full"
           />
         </div>

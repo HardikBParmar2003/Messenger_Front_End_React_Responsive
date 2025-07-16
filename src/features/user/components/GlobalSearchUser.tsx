@@ -9,7 +9,7 @@ interface User {
   profile_photo: string;
 }
 export const GlobalSearchUser: FC = () => {
-  const [userName, setUserName] = useState("");
+  const [value, seSearchValue] = useState("");
   const [serachUsers, setSearchUsers] = useState<User[]>([]);
   const { setSelectedUser } = useSelectedUserContext();
 
@@ -17,7 +17,7 @@ export const GlobalSearchUser: FC = () => {
     async function fetchUsers() {
       try {
         const params = new URLSearchParams({
-          value: userName || "",
+          value: value || "",
           page: "1",
           pageSize: "10",
           sortBy: "first_name",
@@ -34,21 +34,21 @@ export const GlobalSearchUser: FC = () => {
         throw error;
       }
     }
-    if (userName.trim() != "") {
+    if (value.trim() != "") {
       fetchUsers();
     } else {
       setSearchUsers([]);
     }
-  }, [userName]);
+  }, [value]);
   return (
     <div>
       <input
         type="text"
         placeholder="Search users to start chat"
         className="input"
-        value={userName}
+        value={value}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setUserName(e.target.value)
+          seSearchValue(e.target.value)
         }
       />
 

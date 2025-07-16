@@ -27,7 +27,7 @@ export function SelectedUserContextProvider({ children }: any) {
 export function useSelectedUserContext() {
   const context = useContext(SelectedUserContext);
   if (!context) {
-    throw new Error("Error while useing use selectd user context");
+    throw new Error("Error while using selectd user context");
   }
   return context;
 }

@@ -32,11 +32,11 @@ export function LocalSearchUser({ users }: LocalSearchUserProps) {
           setSearchValue(e.target.value)
         }
       />
-      <ul className="w-[300px] mr-10 ml-10 h-[700px] overflow-y-auto">
+      <ul className="w-[300px] mr-10 ml-10 h-[550px] overflow-y-auto">
         {filteredUsers.map((user: User) => (
           <li
             key={user.user_id}
-            className={`user-list flex items-center space-x-2 p-[5%] ml-5 ${user.user_id === selectedUser?.user_id ? 'bg-blue-500 text-white rounded-2xl' : 'hover:bg-gray-100'}` }
+            className={`user-list flex items-center space-x-2 p-[5%] ml-5 mt-2 ${user.user_id === selectedUser?.user_id ? 'bg-gray-400 text-black rounded-xl' : 'hover:bg-gray-100'}` }
             onClick={()=>setSelectedUser(user)}
           >
             <img

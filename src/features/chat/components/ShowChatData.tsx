@@ -31,8 +31,7 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
     const grouped: Record<string, Chat[]> = {};
     allMessages?.map((chat) => {
       const chatDate = new Date(chat.createdAt);
-      const chatDateKey = `${chatDate.getDate()} - ${chatDate.getMonth()} - ${chatDate.getFullYear()}`;
-
+      const chatDateKey = `${chatDate.getDate()} - ${chatDate.getMonth()+1} - ${chatDate.getFullYear()}`;
       if (!grouped[chatDateKey]) {
         grouped[chatDateKey] = [];
       }
@@ -44,8 +43,6 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
 
   function sendMessage() {
     if (!inputMessageRef.current?.value.trim()) {
-      alert("Empty Message Can't send");
-      return;
     } else {
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
@@ -58,7 +55,6 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
   }
 
   useEffect(() => {
-
     socket.on("send message back", (data: Chat) => {
       if (
         selectedUser?.user_id == data.receiver_id ||
@@ -79,7 +75,7 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
     }
   }, [ChatData]);
   return (
-    <div className="flex flex-col h-[94%] ">
+    <div className="flex flex-col h-[92%] ">
       <div className="flex-1 p-6 bg-gray-100 overflow-y-auto h-[">
         {Object.entries(groupChatByDate).map(([date, chat]) => (
           <div key={date}>
@@ -94,10 +90,10 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
               return isSender ? ( // I can also user conditional class name
                 <div
                   key={index}
-                  className="flex mb-4 w-[20%] bg-green-100 ml-auto rounded-md"
+                  className="flex mb-4 w-[20%] bg-green-100 ml-auto rounded-md text-left"
                 >
-                  <div className="w-full m-2">
-                    {msg.message}
+                  <div className="w-full m-2 text-left">
+                   {msg.message}
                     <div className="text-xs text-gray-500 mt-1 text-right">
                       {newTime}
                     </div>
@@ -108,9 +104,9 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
                   key={index}
                   className="flex  mb-4 w-[20%] bg-white mr-auto  rounded-md"
                 >
-                  <div className="w-full m-2">
-                    {msg.message}
-                    <div className="text-xs text-gray-500 mt-1 text-right">
+                  <div className="w-full m-2 text-left">
+                  {msg.message}
+                  <div className="text-xs text-gray-500 mt-1 text-right">
                       {newTime}
                     </div>
                   </div>
@@ -120,7 +116,7 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
           </div>
         ))}
       </div>
-      <div className="bg-gray-300 p-4 mt-1 h-auto ">
+      <div className="bg-gray-300 p-1 mt-1 h-auto ">
         <input
           type="text"
           placeholder="ENTER MESSAGE"
@@ -137,4 +133,3 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
     </div>
   );
 }
-

@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { useLoggedInUserContext } from "../../user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { ShowChatData } from "./index";
@@ -17,10 +17,8 @@ export function Chat() {
     const user_id: number = Number(selectedUser?.user_id);
     async function FetchChatData() {
       try {
-        console.log("user id:", user_id);
         if (user_id) {
           const response = await fetchChatData(user_id);
-          console.log("response is", response.data.data.length);
           if (response.data.data.length > 0) {
             setChatData(response.data.data);
           }else{
@@ -37,10 +35,10 @@ export function Chat() {
 
   return (
     <>
-      <div className="flex m-[10px]">
+      <div className="flex m-1">
         <img
           src={selectedUser?.profile_photo}
-          className="user-profile-image w-[60px] h-[60px] rounded-full"
+          className="user-profile-image w-[60px] h-[60px] rounded-full border border-gray-400"
           key={selectedUser?.user_id}
         />
         {loggedInUser?.user_id === selectedUser?.user_id ? (

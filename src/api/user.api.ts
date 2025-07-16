@@ -11,3 +11,7 @@ export const individualUser = () => {
 export const findUser = (params: string) => {
   return api.post(`user/findUser?${params}`);
 };
+
+export const getGroupChat = (group_id:number) =>{
+  return api.get(`/user/getGroupChatWithUser/${group_id}`)
+}

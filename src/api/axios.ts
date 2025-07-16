@@ -14,12 +14,14 @@ api.interceptors.response.use(
     return response;
   },
   (error) => {
-    if (error.response?.status == 401) {
-      alert("Unauthorized User");
+    if (error.response?.status == 400) {
+      alert(error.response?.data.message);
+    } else if (error.response?.status == 401) {
+      alert(error.response?.data.message);
     } else if (error.response?.status == 404) {
-      alert("Not Found");
+      alert(error.response?.data.message);
     } else if (error.response?.status == 500) {
-      alert("Internal Server Error");
+      alert(error.response?.data.message);
     }
     return Promise.reject(error);
   }
