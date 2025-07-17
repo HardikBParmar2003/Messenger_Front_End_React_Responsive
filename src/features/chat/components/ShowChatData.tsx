@@ -31,7 +31,9 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
     const grouped: Record<string, Chat[]> = {};
     allMessages?.map((chat) => {
       const chatDate = new Date(chat.createdAt);
-      const chatDateKey = `${chatDate.getDate()} - ${chatDate.getMonth()+1} - ${chatDate.getFullYear()}`;
+      const chatDateKey = `${chatDate.getDate()} - ${
+        chatDate.getMonth() + 1
+      } - ${chatDate.getFullYear()}`;
       if (!grouped[chatDateKey]) {
         grouped[chatDateKey] = [];
       }
@@ -93,7 +95,7 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
                   className="flex mb-4 w-[20%] bg-green-100 ml-auto rounded-md text-left"
                 >
                   <div className="w-full m-2 text-left">
-                   {msg.message}
+                    {msg.message}
                     <div className="text-xs text-gray-500 mt-1 text-right">
                       {newTime}
                     </div>
@@ -105,8 +107,8 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
                   className="flex  mb-4 w-[20%] bg-white mr-auto  rounded-md"
                 >
                   <div className="w-full m-2 text-left">
-                  {msg.message}
-                  <div className="text-xs text-gray-500 mt-1 text-right">
+                    {msg.message}
+                    <div className="text-xs text-gray-500 mt-1 text-right">
                       {newTime}
                     </div>
                   </div>

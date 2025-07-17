@@ -1,15 +1,9 @@
 import { useSelectedUserContext } from "@/features/chat/hooks";
 import {  useMemo, useState } from "react";
-interface User {
-  user_id?: number;
-  first_name?: string;
-  last_name?: string;
-  profile_photo?: string;
-}
+import type { LocalSearchUserProps, User } from "@/interface/interface";
 
-interface LocalSearchUserProps {
-  users: User[];
-}
+
+
 export function LocalSearchUser({ users }: LocalSearchUserProps) {
   const [searchValue, setSearchValue] = useState("");
   const {setSelectedUser,selectedUser} = useSelectedUserContext();

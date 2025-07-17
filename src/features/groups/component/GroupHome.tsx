@@ -43,12 +43,13 @@ export function GroupHome() {
     );
   };
 
+
   return (
-    <div className="bg-gray-200 h-[750px]">
+    <div className="bg-gray-200 h-full">
       <NavBar />
       <SelectedGroupContextProvider>
         <div
-          className={`flex h-screen m-5 transition duration-300 ${
+          className={`flex h-full m-5 transition duration-300 ${
             isModal ? "blur-xs pointer-events-none" : ""
           }`}
         >
@@ -60,11 +61,12 @@ export function GroupHome() {
             <GroupChat
               onUpdateGroup={updatedGroups}
               onDeleteGroup={onDeleteGroup}
+
             />
           </div>
           <div className="w-[25%]  h-[80%] border- border-gray-400 bg-anmber-400">
             <button
-              className="bg-blue-300 p-2 m-1 border rounded-3xl text-2xl focus:hover:bg-gray-300"
+              className="bg-gray-400 p-2 m-1 border rounded-xl text-2xl hover:bg-white border-gray-800"
               onClick={() => setIsModal(true)}
             >
               Create Group
@@ -81,7 +83,6 @@ export function GroupHome() {
             </div>
           </div>
         )}
-        
       </SelectedGroupContextProvider>
     </div>
   );

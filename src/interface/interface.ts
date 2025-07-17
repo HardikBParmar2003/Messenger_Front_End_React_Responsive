@@ -8,6 +8,9 @@ export interface User {
     password?: string;
   }
 
+  export interface LocalSearchUserProps {
+    users: User[];
+  }
 
   export interface Group {
     group_id:number;
@@ -29,3 +32,28 @@ export interface User {
   export interface GroupChatProps{
     ChatData : GroupChat[]
   }
+
+  export interface RemoveMemberProps  {
+    isOpen: boolean;
+    onClose: () => void;
+    groupUsers:User[]
+    removeMember : (user_id:number)=>void
+  };
+
+  export interface CloseModelProps {
+    closeModal: () => void;
+    addNewGroup: (group: Group) => void;
+  }
+
+  export interface EditGroupProps  {
+    isOpen: boolean;
+    onClose: () => void;
+    onGroupUpdated: (updatedGroup: Group) => void;
+  };
+
+  export interface ViewGroupMemberProps  {
+    isOpen: boolean;
+    onClose: () => void;
+    groupUsers:User[]
+  };
+ 

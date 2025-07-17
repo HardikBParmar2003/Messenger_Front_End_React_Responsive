@@ -46,14 +46,14 @@ export function UpdateUser() {
 
   return (
     <div className="bg--200 flex justify-center items-center min-h-screen">
-      <form onSubmit={handleSubmit(updateUserData)}>
+      <form onSubmit={handleSubmit(updateUserData)}  className="text-left">
         <div className="">
           <img
             src={profile}
             className="w-[180px] h-[150px] rounded-full"
           />
         </div>
-        <h1 className="text-4xl font-bold mb-3">Sign Up Form</h1>
+        <h6 className="text-3xl font-bold mb-3">Update User   </h6>
         <div className="m-2 ">
           <label>First Name: </label>
           <input
@@ -86,7 +86,7 @@ export function UpdateUser() {
           <label>Profile:</label>
           <input
             type="file"
-            className="border"
+            className="border w-62"
             {...register("profile")}
             accept="image/jpeg,image/jpg,image/png"
             onChange={handleProfile}

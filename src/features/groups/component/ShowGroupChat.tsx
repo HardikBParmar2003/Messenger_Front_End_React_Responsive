@@ -15,29 +15,14 @@ export function ShowGroupChat({ ChatData }: GroupChatProps) {
   const { selectedGroup } = useSelectedGroupContext();
   const { loggedInUser } = useLoggedInUserContext();
   const inputMessageRef = useRef<HTMLInputElement>(null);
-  // const groupChatByDate = useMemo(() => {
-  //   const grouped: Record<string, GroupChat[]> = {};
-  //   allMessages.map((chat) => {
-  //     const msgDate = new Date(chat.createdAt);
-  //     const msgKeyDate = `${msgDate.getDate()}-${
-  //       msgDate.getMonth() + 1
-  //     }-${msgDate.getFullYear()}`;
-  //     if (!grouped[msgKeyDate]) {
-  //       grouped[msgKeyDate] = [];
-  //     }
-  //     grouped[msgKeyDate].push(chat);
-  //   });
-  //   return grouped;
-  // }, [allMessages]);
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
   const groupChatByDate = useMemo(() => {
     const grouped: Record<string, GroupChat[]> = {};
-
     const sortedMessages = [...allMessages].sort(
       (a, b) =>
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     );
-
     sortedMessages.forEach((chat) => {
       const chatDate = new Date(chat.createdAt);
       const chatDateKey = `${chatDate.getDate()} - ${
@@ -49,7 +34,6 @@ export function ShowGroupChat({ ChatData }: GroupChatProps) {
       }
       grouped[chatDateKey].push(chat);
     });
-
     return grouped;
   }, [allMessages]);
 
@@ -65,24 +49,38 @@ export function ShowGroupChat({ ChatData }: GroupChatProps) {
   }
 
   useEffect(() => {
+    if (!selectedGroup) return;
     socket.on("send group message back", (data) => {
       if (selectedGroup?.group_id == data.group_id) {
         setAllMessages((prev) => [...prev, data]);
       }
     });
     return () => {
-      socket.off("send message back");
+      socket.off("send group message back");
     };
-  }, []);
+  }, [selectedGroup]);
 
   useEffect(() => {
     if (ChatData) {
       setAllMessages(ChatData);
     }
   }, [ChatData]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [allMessages]);
+
   return (
-    <div className="flex flex-col h-[92%] ">
-      <div className="flex-1 p-6 bg-gray-100 overflow-y-auto h-[">
+    <div className="flex flex-col h-[96.5%]  ">
+      <div
+        ref={chatContainerRef}
+        className="flex-1 p-6 bg-gray-100 overflow-y-auto min-h-0"
+      >
         {Object.entries(groupChatByDate)
           .sort(([a], [b]) => {
             const [aDay, aMonth, aYear] = a.split(" - ").map(Number);
@@ -101,7 +99,7 @@ export function ShowGroupChat({ ChatData }: GroupChatProps) {
                 const newDate: Date = new Date(msg.createdAt);
                 const newTime: string =
                   newDate.getHours() + ":" + newDate.getMinutes();
-                return isSender ? ( // I can also user conditional class name
+                return isSender ? (
                   <div
                     key={index}
                     className="flex mb-4 w-[40%] bg-green-100 ml-auto rounded-md"

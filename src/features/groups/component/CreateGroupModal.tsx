@@ -1,11 +1,8 @@
 import { createGroup } from "@/api/group.api";
-import type { Group } from "@/interface/interface";
+import type { CloseModelProps, Group } from "@/interface/interface";
 import { useState } from "react";
 
-interface CloseModelProps {
-  closeModal: () => void;
-  addNewGroup: (group: Group) => void;
-}
+
 function CreateGroupModal({ closeModal, addNewGroup }: CloseModelProps) {
   const [groupName, setGroupName] = useState("");
 

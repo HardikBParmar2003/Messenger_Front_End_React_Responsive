@@ -1,16 +1,17 @@
-import { findUser } from "@/api/handler";
+import { addMember, findUser, individualUser } from "@/api/handler";
 import { useSelectedGroupContext } from "../hook";
 import type { User } from "@/interface/interface";
 import { useState } from "react";
 type AddMemberProps = {
   isOpen: boolean;
   onClose: () => void;
+  addUSer: (user: User) => void;
 };
 
-export function AddMember({ isOpen, onClose }: AddMemberProps) {
+export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
   const [value, setvalue] = useState("");
   const [searchUsers, setSearchUsers] = useState<User[]>([]);
-  const {selectedGroup} = useSelectedGroupContext()
+  const { selectedGroup } = useSelectedGroupContext();
   const searchUser = async () => {
     const params = new URLSearchParams({
       value: value || "",
@@ -23,13 +24,16 @@ export function AddMember({ isOpen, onClose }: AddMemberProps) {
     setSearchUsers(response.data.data);
   };
 
-  const add = async(user_id:number)=>{
-    // const formData = new FormData()
-    // formData.append("member_id",user_id)
-    // formData.append("group_id",selectedGroup?.group_id)
-    // const response = await addMember(formData)
-
-  }
+  const add = async (user: User) => {
+    const formData = new FormData();
+    const user_id = String(user.user_id);
+    const group_id = String(selectedGroup?.group_id);
+    formData.append("member_id", user_id);
+    formData.append("group_id", group_id);
+    const response = await addMember(formData);
+    const newMember = await individualUser(response.data.data.user_id);
+    addUSer(newMember.data.data);
+  };
 
   if (!isOpen) return null;
 
@@ -43,7 +47,7 @@ export function AddMember({ isOpen, onClose }: AddMemberProps) {
         >
           <span className="text-xl font-semibold leading-none">&times;</span>
         </button>
-        <h2 className="text-xl font-semibold mt-4 mb-4">Edit Group</h2>
+        <h2 className="text-xl font-semibold mt-4 mb-4">Add Member</h2>
 
         <div className="flex">
           <input
@@ -55,39 +59,36 @@ export function AddMember({ isOpen, onClose }: AddMemberProps) {
           />
           <button
             onClick={searchUser}
-            className="px-4 h-[44px] ml-2 text-xl bg-green-600 text-gray-800 rounded"
+            className="px-4 h-[44px] ml-2 text-xl bg-green-800 text-gray-800 rounded hover:bg-green-500"
           >
-            go
+            Go
           </button>
         </div>
 
-          <ul className="w-[90%]  m-2 p-5 overflow-y-auto h-[70%]">
-            {searchUsers.length > 0 ? (
-              searchUsers.map((user: User) => (
-                <li
-                  key={user.user_id}
-                  className="user-list w-[100%] flex p-3"
+        <ul className="w-[90%]  m-2 p-5 overflow-y-auto h-[70%]">
+          {searchUsers.length > 0 ? (
+            searchUsers.map((user: User) => (
+              <li key={user.user_id} className="user-list w-[100%] flex p-3">
+                <img
+                  src={user.profile_photo}
+                  className="user-profile-image cursor-pointer w-8 h-8 rounded-full"
+                />
+                <span className="user-name w-[290px] ">
+                  {user.first_name + " " + user.last_name}
+                </span>
+                <button
+                  className="bg-gray-300 rounded-md p-1.5 ml-10 cursor-pointer hover:ring-2 hover:ring-blue-500"
+                  onClick={() => add(user)}
                 >
-                  <img
-                    src={user.profile_photo}
-                    className="user-profile-image cursor-pointer w-8 h-8 rounded-full"
-                  />
-                  <span className="user-name w-[290px] ">
-                    {user.first_name + " " + user.last_name}
-                  </span>
-                  <button
-                    className="bg-gray-300 rounded-md p-1.5 ml-10 cursor-pointer hover:ring-2 hover:ring-blue-500"
-                    onClick={() => add(Number(user.user_id))}
-                  >
-                    ADD
-                  </button>
-                </li>
-              ))
-            ) : (
-              <li className=" mr-5 text-2xl"> Search to chat </li>
-            )}
-          </ul>
-        </div>
+                  ADD
+                </button>
+              </li>
+            ))
+          ) : (
+            <li className=" mr-5 text-2xl"> Search to ADD </li>
+          )}
+        </ul>
       </div>
+    </div>
   );
 }

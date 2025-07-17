@@ -1,19 +1,13 @@
 import { updateGroup } from "@/api/group.api";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelectedGroupContext } from "../hook";
-import type { Group } from "@/interface/interface";
+import type { EditGroupProps } from "@/interface/interface";
 
-type Props = {
-  isOpen: boolean;
-  onClose: () => void;
-  onGroupUpdated: (updatedGroup: Group) => void;
-};
-
-const EditGroupModal: React.FC<Props> = ({
+export function EditGroupModal({
   isOpen,
   onClose,
   onGroupUpdated,
-}) => {
+}: EditGroupProps) {
   const { selectedGroup, setSelectedGroup } = useSelectedGroupContext();
   const [groupName, setGroupName] = useState(
     selectedGroup?.group_name as string
@@ -59,13 +53,13 @@ const EditGroupModal: React.FC<Props> = ({
   return (
     <div className="fixed inset-0  bg-opacity-40 flex justify-center items-center z-50">
       <div className="bg-white p-6 rounded-lg w-[350px] shadow-md relative">
-       <button
-        className="absolute  top-1 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition"
-        onClick={onClose}
-        aria-label="Close modal"
-      >
-        <span className="text-xl font-semibold leading-none">&times;</span>
-      </button>
+        <button
+          className="absolute  top-1 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 text-gray-600 hover:bg-gray-300 hover:text-gray-800 transition"
+          onClick={onClose}
+          aria-label="Close modal"
+        >
+          <span className="text-xl font-semibold leading-none">&times;</span>
+        </button>
         <h2 className="text-xl font-semibold mt-4 mb-4">Edit Group</h2>
 
         <label className="block mb-2 text-sm font-medium">Group Name</label>
@@ -106,6 +100,6 @@ const EditGroupModal: React.FC<Props> = ({
       </div>
     </div>
   );
-};
+}
 
 export default EditGroupModal;

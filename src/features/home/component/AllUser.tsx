@@ -44,7 +44,7 @@ export const AllUser: FC = () => {
           <div className="w-[53%] h-[80%] border border-gray-400 bg-gray-300">
             <Chat />
           </div>
-          <div className="w-[22%]  h-[90%]">
+          <div className="w-[22%]  h-[80%]">
 
             <GlobalSearchUser />
           </div>
