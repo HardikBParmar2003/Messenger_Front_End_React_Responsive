@@ -26,6 +26,7 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
   const { selectedUser } = useSelectedUserContext();
   const inputMessageRef = useRef<HTMLInputElement>(null);
   const [allMessages, setAllMessages] = useState<Chat[]>(ChatData || []);
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
   const groupChatByDate = useMemo(() => {
     const grouped: Record<string, Chat[]> = {};
@@ -76,9 +77,21 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
       setAllMessages(ChatData);
     }
   }, [ChatData]);
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTo({
+        top: chatContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [allMessages]);
   return (
     <div className="flex flex-col h-[92%] ">
-      <div className="flex-1 p-6 bg-gray-100 overflow-y-auto h-[">
+      <div
+        ref={chatContainerRef}
+        className="flex-1 p-6 bg-gray-100 overflow-y-auto h-["
+      >
         {Object.entries(groupChatByDate).map(([date, chat]) => (
           <div key={date}>
             <span className="block w-[15%] text-center mb-4  p-0.5 bg-gray-300 rounded-md m-auto ">

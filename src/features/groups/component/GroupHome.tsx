@@ -43,7 +43,6 @@ export function GroupHome() {
     );
   };
 
-
   return (
     <div className="bg-gray-200 h-full">
       <NavBar />
@@ -61,7 +60,6 @@ export function GroupHome() {
             <GroupChat
               onUpdateGroup={updatedGroups}
               onDeleteGroup={onDeleteGroup}
-
             />
           </div>
           <div className="w-[25%]  h-[80%] border- border-gray-400 bg-anmber-400">

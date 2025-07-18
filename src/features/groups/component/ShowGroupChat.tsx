@@ -1,4 +1,4 @@
-import type { GroupChat, GroupChatProps } from "@/interface/interface";
+import type { GroupChat, GroupChatProps, User } from "@/interface/interface";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -10,12 +10,15 @@ const socket = io("http://localhost:4000", {
   withCredentials: true,
 });
 
-export function ShowGroupChat({ ChatData }: GroupChatProps) {
+export function ShowGroupChat({ ChatData, allUsers }: GroupChatProps) {
   const [allMessages, setAllMessages] = useState<GroupChat[]>(ChatData || []);
   const { selectedGroup } = useSelectedGroupContext();
   const { loggedInUser } = useLoggedInUserContext();
   const inputMessageRef = useRef<HTMLInputElement>(null);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
+  const [input, setInput] = useState("");
+  const [tagUser, setTagUser] = useState<User[]>([]);
+  const [showDropdown, setShowDropdown] = useState(false);
 
   const groupChatByDate = useMemo(() => {
     const grouped: Record<string, GroupChat[]> = {};
@@ -45,6 +48,7 @@ export function ShowGroupChat({ ChatData }: GroupChatProps) {
       const group_id: number = Number(selectedGroup?.group_id);
       socket.emit("send group message", sender_id, group_id, message);
       inputMessageRef.current.value = "";
+      setInput("");
     }
   }
 
@@ -74,6 +78,26 @@ export function ShowGroupChat({ ChatData }: GroupChatProps) {
       });
     }
   }, [allMessages]);
+
+  useEffect(() => {
+    const inputValue = input.trim();
+    if (!inputValue.trim()) {
+      setTagUser([]);
+      setShowDropdown(false);
+    }
+    if (inputValue[0] === "@") {
+      const userName = inputValue.slice(1);
+      const users = allUsers.filter((user) =>
+        (user.first_name + " " + user.last_name)
+          .toLowerCase()
+          .includes(userName.toLowerCase())
+      );
+      setTagUser(users);
+      setShowDropdown(true);
+    } else {
+      setShowDropdown(false);
+    }
+  }, [input]);
 
   return (
     <div className="flex flex-col h-[96.5%]  ">
@@ -137,15 +161,34 @@ export function ShowGroupChat({ ChatData }: GroupChatProps) {
             </div>
           ))}
       </div>
-      <div className="bg-gray-300 p-1 mt-1 h-auto ">
+      <div className="bg-gray-300 p-1 mt-1 h-auto relative">
         {selectedGroup ? (
           <>
+            {showDropdown && (
+              <ul className="absolute left-0 right-0 bottom-full mb-1 bg-white border-gray-300 rounded-md shadow z-50 max-h-40 overflow-y-auto">
+                {tagUser.map((user) => (
+                  <li
+                    key={user.user_id}
+                    onClick={() => {
+                      setInput(` @ ${user.first_name} ${user.last_name}`),
+                        setShowDropdown(false);
+                    }}
+                    className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
+                  >
+                    @{(user.first_name as string) + " " + user.last_name}
+                  </li>
+                ))}
+              </ul>
+            )}
             <input
               type="text"
               placeholder="ENTER MESSAGE"
               className="w-[85%] mx-auto p-1.5 border rounded-4xl bg-white"
               ref={inputMessageRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
             />
+
             <button
               className="bg-red-600-200 p-2.5 ml-4 border rounded-full min-w-[50px] cursor-pointer"
               onClick={sendMessage}

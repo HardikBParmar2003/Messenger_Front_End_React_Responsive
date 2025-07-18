@@ -4,7 +4,11 @@ export const updateUser = (data: FormData) => {
   return api.put("user/updateUserDetails", data);
 };
 
-export const individualUser = (user_id: number) => {
+export const loggedInUser = () => {
+   return api.get("user/getIndividualUser");
+};
+
+export const individualUser = (user_id?: number) => {
   if (user_id) return api.get(`user/getIndividualUser/${user_id}`);
   else return api.get("user/getIndividualUser");
 };

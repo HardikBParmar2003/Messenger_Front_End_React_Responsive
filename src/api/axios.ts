@@ -1,5 +1,4 @@
 import axios from "axios";
-import { data } from "react-router";
 
 export const api = axios.create({
   baseURL: "http://localhost:4000",

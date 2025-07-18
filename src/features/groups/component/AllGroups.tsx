@@ -4,7 +4,6 @@ import { useSelectedGroupContext } from "../hook";
 export function AllGroups({ groups }: AllGroupsProps) {
   const [searchValue, setSearchValue] = useState("");
   const { setSelectedGroup, selectedGroup } = useSelectedGroupContext();
-  console.log("selected Group is:",selectedGroup);
   const filteredGroup = useMemo(() => {
     return groups.filter((group) =>
       group.group_name.toLocaleLowerCase().includes(searchValue.toLowerCase())

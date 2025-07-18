@@ -12,6 +12,8 @@ import {
   faDoorOpen,
   faEdit,
   faEye,
+  faL,
+  faSearch,
   faTrash,
   faUserMinus,
   faUserPlus,
@@ -19,6 +21,7 @@ import {
 import type { Group, User } from "@/interface/interface";
 import { AddMember, EditGroupModal, RemoveMember, ShowGroupChat } from ".";
 import { ViewGroupMember } from "./ViewGroupMember";
+import { toast } from "react-toastify";
 
 type GroupUserProps = {
   onUpdateGroup: (updatedGroup: Group) => void;
@@ -33,8 +36,8 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
   const [isAddMember, setIsAddMember] = useState<boolean>(false);
   const [isRemoveMember, setIsRemoveMember] = useState<boolean>(false);
   const [isViewMember, setIsViewMember] = useState<boolean>(false);
+  const [groupUserReady, setGroupUserReady] = useState(false);
 
-  console.log("selected grouup in group chat ", selectedGroup);
   useEffect(() => {
     if (!selectedGroup) {
       return;
@@ -52,6 +55,7 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
             const response = await getGroupChat(group_id);
             if (response.data.data.length > 0) {
               setChatData(response.data.data);
+              setGroupUserReady(true);
             } else {
               setChatData([]);
             }
@@ -62,6 +66,7 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
         throw error;
       }
     }
+    setGroupUserReady(false);
     FetchUserChatData();
   }, [selectedGroup]);
 
@@ -69,10 +74,12 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
     setGroupUsers((prevUser) =>
       prevUser.filter((user) => user.user_id != user_id)
     );
+    toast.success("User removed successfully");
   };
 
   const addUSer = (user: User) => {
     setGroupUsers((prev) => [...prev, user]);
+    toast.success("team member added");
   };
 
   const deleteGroup = async () => {
@@ -185,7 +192,11 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
           </span>
         )}
       </div>
-      {selectedGroup && <ShowGroupChat ChatData={chatData} />}
+      {selectedGroup && groupUserReady ? (
+        <ShowGroupChat ChatData={chatData} allUsers={groupUser} />
+      ) : (
+        <p>Loading..</p>
+      )}
 
       {isEditOpen && (
         <EditGroupModal

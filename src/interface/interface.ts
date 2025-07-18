@@ -31,6 +31,7 @@ export interface User {
 
   export interface GroupChatProps{
     ChatData : GroupChat[]
+    allUsers:User[]
   }
 
   export interface RemoveMemberProps  {

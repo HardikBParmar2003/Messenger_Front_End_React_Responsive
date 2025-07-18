@@ -1,19 +1,13 @@
 import { verifyOtp } from "@/api/handler";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
+import { getCookie } from "../function";
 
 export function VerifyEmail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    function getUserEmail() {
-      const allCOokies = document.cookie.split(";");
-      for (let cookie of allCOokies) {
-        const [key, value] = cookie.split("=");
-        if (key === "user_email") return decodeURIComponent(value);
-      }
-    }
-    const user_email = getUserEmail();
+    const user_email = getCookie("user_email");
     if (!user_email) {
       navigate("/login");
     }
@@ -25,7 +19,7 @@ export function VerifyEmail() {
     const formData = new FormData();
     formData.append("otp", otp);
     const response = await verifyOtp(formData);
-    alert("OTP successfuly verified");
+    alert("OTP successfuly verified complete sign up process within 5 minutes");
     navigate("/signup");
   };
   return (

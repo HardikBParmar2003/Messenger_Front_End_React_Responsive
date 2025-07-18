@@ -1,4 +1,5 @@
 import { individualUser } from "@/api/handler";
+import { getCookie } from "@/features/auth/function";
 import { createContext, useContext, useEffect, useState } from "react";
 
 interface User {
@@ -25,6 +26,7 @@ export function LoggedInUserContextProvider({ children }: any) {
   useEffect(() => {
     async function isUSer() {
       try {
+        if(!getCookie("jwt_token")) return
         const response = await individualUser();
         if (response.data.data) {
           setLoggedInUser(response.data.data);
