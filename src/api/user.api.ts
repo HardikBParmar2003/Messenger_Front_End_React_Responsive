@@ -5,7 +5,7 @@ export const updateUser = (data: FormData) => {
 };
 
 export const loggedInUser = () => {
-   return api.get("user/getIndividualUser");
+  return api.get("user/getIndividualUser");
 };
 
 export const individualUser = (user_id?: number) => {
@@ -19,4 +19,8 @@ export const findUser = (params: string) => {
 
 export const getGroupChat = (group_id: number) => {
   return api.get(`/user/getGroupChatWithUser/${group_id}`);
+};
+
+export const groupChatDownload = (group_id: number) => {
+  return api.get(`/user/generatePDFGroupChat/${group_id}`);
 };

@@ -108,7 +108,7 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
                   className="flex mb-4 w-[20%] bg-green-100 ml-auto rounded-md text-left"
                 >
                   <div className="w-full m-2 text-left">
-                    {msg.message}
+                    {msg.message} 
                     <div className="text-xs text-gray-500 mt-1 text-right">
                       {newTime}
                     </div>
