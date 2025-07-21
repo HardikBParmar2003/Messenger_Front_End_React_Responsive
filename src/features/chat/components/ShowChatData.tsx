@@ -72,17 +72,26 @@ export function ShowChatData({ ChatData, users, setUsers }: ChatDataTypeProps) {
     socket.on("send message back", async (data: Chat) => {
       console.log("chat data is:", data);
       if (
-        selectedUser?.user_id == data.receiver_id ||
-        selectedUser?.user_id == data.sender_id
+        (data.sender_id === selectedUser?.user_id &&
+          data.receiver_id === loggedInUser?.user_id) ||
+        (data.receiver_id === selectedUser?.user_id &&
+          data.sender_id === loggedInUser?.user_id)
       ) {
         setAllMessages((prev) => [...prev, data]);
       }
       try {
-        const response = await chattingUsers();
-        if (response.data.data) {
-          setUsers(response.data.data);
-        } else {
-          setUsers([]);
+        console.log("logged in user id is:", loggedInUser);
+        console.log("data is:", data);
+        if (
+          loggedInUser?.user_id == data.sender_id ||
+          loggedInUser?.user_id == data.receiver_id
+        ) {
+          const response = await chattingUsers();
+          if (response.data.data) {
+            setUsers(response.data.data);
+          } else {
+            setUsers([]);
+          }
         }
       } catch (err: any) {
         throw err;

@@ -1,6 +1,11 @@
 import { logOutUser } from "@/api/handler";
 
 export const LogOut = async () => {
-  await logOutUser();
-  window.location.href = "/login";
+  let final:boolean = confirm("You want to log out ?")
+  if(final){
+    await logOutUser();
+    window.location.href = "/login";
+  }else{
+    return
+  }
 };

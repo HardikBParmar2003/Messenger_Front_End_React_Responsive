@@ -14,6 +14,8 @@ import {
   faDownload,
   faEdit,
   faEye,
+  faFile,
+  faFilePdf,
   faTrash,
   faUserMinus,
   faUserPlus,
@@ -168,7 +170,7 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
 
                   <button onClick={downloadChat}>
                     <FontAwesomeIcon
-                      icon={faDownload}
+                      icon={faFilePdf}
                       className="text-green-800 border  p-1.5 hover:cursor-pointer rounded-sm"
                     />
                   </button>
@@ -203,7 +205,7 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
 
                   <button onClick={downloadChat}>
                     <FontAwesomeIcon
-                      icon={faDownload}
+                      icon={faFilePdf}
                       className="text-green-800 border  p-1.5 hover:cursor-pointer rounded-sm"
                     />
                   </button>
@@ -224,7 +226,7 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
           </span>
         )}
       </div>
-      {selectedGroup && groupUserReady && (
+      {selectedGroup && (
         <ShowGroupChat ChatData={chatData} allUsers={groupUser} />
       )}
 

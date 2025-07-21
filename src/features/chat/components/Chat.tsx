@@ -4,8 +4,9 @@ import { useSelectedUserContext } from "../hooks/index";
 import { ShowChatData } from "./index";
 import { chatDownload, fetchChatData } from "@/api/handler";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
 import type { chatProps } from "@/interface/interface";
+import { toast } from "react-toastify";
 
 export function Chat({ users, setUsers }: chatProps) {
   const { selectedUser, setSelectedUser } = useSelectedUserContext();
@@ -46,7 +47,8 @@ export function Chat({ users, setUsers }: chatProps) {
           selectedUser?.last_name) as string,
       };
       const response = await chatDownload(data);
-      alert(response.data.message);
+      toast.success(response.data.message);
+
       setLoading(false);
     } catch (error) {
       throw error;
@@ -58,7 +60,7 @@ export function Chat({ users, setUsers }: chatProps) {
   return (
     <>
       <div className="flex m-1 justify-between">
-        <div className="flex">
+        <div className="flex mt-1">
           <img
             src={selectedUser?.profile_photo}
             className="user-profile-image w-[60px] h-[60px] rounded-full border border-gray-400"
@@ -77,6 +79,7 @@ export function Chat({ users, setUsers }: chatProps) {
         <div>
           {loading ? (
             <span>
+              Loading...
               <svg
                 aria-hidden="true"
                 role="status"
@@ -94,12 +97,11 @@ export function Chat({ users, setUsers }: chatProps) {
                   fill="#1C64F2"
                 />
               </svg>
-              Loading...
             </span>
           ) : (
-            <button onClick={downloadChat} className="bg-k-100 m-3.5 text-lg">
+            <button onClick={downloadChat} className="bg-k-100 m-3.5 text-3xl">
               <FontAwesomeIcon
-                icon={faDownload}
+                icon={faFilePdf}
                 className="text-green-800 border  p-1.5 hover:cursor-pointer rounded-sm"
               />
             </button>

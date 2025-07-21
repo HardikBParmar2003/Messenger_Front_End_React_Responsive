@@ -1,7 +1,7 @@
 import { createGroup } from "@/api/group.api";
 import type { CloseModelProps, Group } from "@/interface/interface";
 import { useState } from "react";
-
+import { toast } from "react-toastify";
 
 function CreateGroupModal({ closeModal, addNewGroup }: CloseModelProps) {
   const [groupName, setGroupName] = useState("");
@@ -14,6 +14,7 @@ function CreateGroupModal({ closeModal, addNewGroup }: CloseModelProps) {
     }
     formData.append("groupName", groupName);
     const response = await createGroup(formData);
+    toast.success(response.data.message);
     setGroupName("");
     addNewGroup(response.data.data);
     closeModal();
