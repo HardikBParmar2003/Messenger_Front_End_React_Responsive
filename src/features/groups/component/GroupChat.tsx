@@ -192,11 +192,10 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
           </span>
         )}
       </div>
-      {selectedGroup && groupUserReady ? (
-        <ShowGroupChat ChatData={chatData} allUsers={groupUser} />
-      ) : (
-        <p>Loading..</p>
-      )}
+      {selectedGroup &&
+        groupUserReady &&(
+          <ShowGroupChat ChatData={chatData} allUsers={groupUser} />
+        )}
 
       {isEditOpen && (
         <EditGroupModal

@@ -25,7 +25,7 @@ export function AllGroups({ groups }: AllGroupsProps) {
         {filteredGroup.map((group: Group) => (
           <li
             key={group.group_id}
-            className={`user-list flex items-center space-x-2 p-[5%] ml-5 mt-2 ${
+            className={`user-list flex items-center space-x-2 p-[5%] ml-5 mt-2 w-[80%]  cursor-pointer ${
               group.group_id === selectedGroup?.group_id
                 ? "bg-gray-400 text-black rounded-xl"
                 : "hover:bg-gray-100"

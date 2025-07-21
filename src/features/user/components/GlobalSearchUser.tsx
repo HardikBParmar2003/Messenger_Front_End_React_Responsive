@@ -1,5 +1,6 @@
 import { findUser } from "@/api/handler";
 import { useSelectedUserContext } from "@/features/chat/hooks";
+import { errorMonitor } from "events";
 import { useEffect, useState, type FC } from "react";
 
 interface User {
@@ -12,34 +13,40 @@ export const GlobalSearchUser: FC = () => {
   const [value, seSearchValue] = useState("");
   const [serachUsers, setSearchUsers] = useState<User[]>([]);
   const { setSelectedUser } = useSelectedUserContext();
+  // const [debouncedValue, setDebouncedValue] = useState("");
 
   useEffect(() => {
-    async function fetchUsers() {
-      try {
-        const params = new URLSearchParams({
-          value: value || "",
-          page: "1",
-          pageSize: "10",
-          sortBy: "first_name",
-          sortType: "desc",
-        });
-        const response = await findUser(params.toString());
-        if (response.data.data) {
-          setSearchUsers(response.data.data);
-        } else {
-          setSearchUsers([]);
+    const debounceFunction = setTimeout(() => {
+      async function fetchUsers() {
+        try {
+          const params = new URLSearchParams({
+            value: value || "",
+            page: "1",
+            pageSize: "10",
+            sortBy: "first_name",
+            sortType: "desc",
+          });
+          const response = await findUser(params.toString());
+          if (response.data.data) {
+            setSearchUsers(response.data.data);
+          } else {
+            setSearchUsers([]);
+          }
+        } catch (error) {
+          alert(error);
+          throw error;
         }
-      } catch (error) {
-        alert(error);
-        throw error;
       }
-    }
-    if (value.trim() != "") {
-      fetchUsers();
-    } else {
-      setSearchUsers([]);
-    }
+
+      if (value.trim() != "") {
+        fetchUsers();
+      } else {
+        setSearchUsers([]);
+      }
+    }, 300);
+    return () => clearTimeout(debounceFunction);
   }, [value]);
+
   return (
     <div>
       <input
