@@ -1,6 +1,5 @@
 import { findUser } from "@/api/handler";
 import { useSelectedUserContext } from "@/features/chat/hooks";
-import { errorMonitor } from "events";
 import { useEffect, useState, type FC } from "react";
 
 interface User {
@@ -9,43 +8,52 @@ interface User {
   last_name: string;
   profile_photo: string;
 }
+
 export const GlobalSearchUser: FC = () => {
-  const [value, seSearchValue] = useState("");
-  const [serachUsers, setSearchUsers] = useState<User[]>([]);
+  const [value, setSearchValue] = useState("");
+  const [searchUsers, setSearchUsers] = useState<User[]>([]);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const { setSelectedUser } = useSelectedUserContext();
-  // const [debouncedValue, setDebouncedValue] = useState("");
 
   useEffect(() => {
-    const debounceFunction = setTimeout(() => {
+    console.log("useEffect triggered, value:", value, "page:", page);
+    const debouncingFunction = setTimeout(() => {
+      console.log("in time out");
+      if (value.trim() === "") {
+        setSearchUsers([]);
+        setTotalPages(1);
+        return;
+      }
+      console.log("in fetch user");
       async function fetchUsers() {
-        try {
-          const params = new URLSearchParams({
-            value: value || "",
-            page: "1",
-            pageSize: "10",
-            sortBy: "first_name",
-            sortType: "desc",
-          });
-          const response = await findUser(params.toString());
-          if (response.data.data) {
-            setSearchUsers(response.data.data);
-          } else {
-            setSearchUsers([]);
-          }
-        } catch (error) {
-          alert(error);
-          throw error;
-        }
+        const params = new URLSearchParams({
+          value,
+          page: page.toString(),
+          pageSize: "10",
+          sortBy: "first_name",
+          sortType: "desc",
+        });
+        const response = await findUser(params.toString());
+        const users = response.data.data || [];
+        const totalCount = response.data.totalRows || 0;
+        console.log("total counr is:", totalCount);
+        setSearchUsers(users);
+        setTotalPages(Math.ceil(totalCount / 10));
       }
 
-      if (value.trim() != "") {
-        fetchUsers();
-      } else {
-        setSearchUsers([]);
-      }
+      fetchUsers();
     }, 300);
-    return () => clearTimeout(debounceFunction);
-  }, [value]);
+    return () => clearTimeout(debouncingFunction);
+  }, [value, page]);
+
+  const goToPage = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    setPage(newPage);
+  };
+
+  console.log("total pages is:", totalPages);
+  console.log("input value is:", value);
 
   return (
     <div>
@@ -54,24 +62,26 @@ export const GlobalSearchUser: FC = () => {
         placeholder="Search users to start chat"
         className="input"
         value={value}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          seSearchValue(e.target.value)
-        }
+        onChange={(e) => {
+          setSearchValue(e.target.value);
+          setPage(1);
+        }}
       />
 
-      <ul className="w-[300px] h-[600px] m-5 overflow-y-auto">
-        {serachUsers.length > 0 ? (
-          serachUsers.map((user: User) => (
-            <li key={user.user_id} className="user-list w-[280px] flex p-1.5">
+      <ul className="w-[300px] h-[500px] m-5 overflow-y-auto border border-gray-300">
+        {searchUsers.length > 0 ? (
+          searchUsers.map((user) => (
+            <li key={user.user_id} className="flex p-1.5 items-center">
               <img
                 src={user.profile_photo}
-                className="user-profile-image cursor-pointer w-8 h-8 rounded-full"
+                alt={`${user.first_name} ${user.last_name}`}
+                className="w-8 h-8 rounded-full"
               />
-              <span className="user-name w-[290px] ">
-                {user.first_name + " " + user.last_name}
+              <span className="ml-3 truncate w-[190px]">
+                {user.first_name} {user.last_name}
               </span>
               <button
-                className="bg-gray-300 rounded-md p-1.5 ml-10 cursor-pointer hover:ring-2 hover:ring-blue-500"
+                className="ml-auto bg-gray-300 rounded-md p-1.5 hover:ring-2 hover:ring-blue-500"
                 onClick={() => setSelectedUser(user)}
               >
                 Chat
@@ -79,9 +89,41 @@ export const GlobalSearchUser: FC = () => {
             </li>
           ))
         ) : (
-          <li className=" mr-5 text-2xl"> Search to chat </li>
+          <li className="text-center p-3">Search to chat</li>
         )}
       </ul>
+
+      {totalPages > 1 && (
+        <div className="flex justify-center space-x-2">
+          <button
+            onClick={() => goToPage(page - 1)}
+            disabled={page === 1}
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Prev
+          </button>
+
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+            <button
+              key={num}
+              onClick={() => goToPage(num)}
+              className={`px-3 py-1 rounded ${
+                num === page ? "bg-blue-500 text-white" : "bg-gray-200"
+              }`}
+            >
+              {num}
+            </button>
+          ))}
+
+          <button
+            onClick={() => goToPage(page + 1)}
+            disabled={page === totalPages}
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
