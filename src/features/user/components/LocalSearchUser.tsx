@@ -1,13 +1,12 @@
 import { useSelectedUserContext } from "@/features/chat/hooks";
-import {  useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import type { LocalSearchUserProps, User } from "@/interface/interface";
 import { useLoggedInUserContext } from "../hooks";
 
-
 export function LocalSearchUser({ users }: LocalSearchUserProps) {
   const [searchValue, setSearchValue] = useState("");
-  const {setSelectedUser,selectedUser} = useSelectedUserContext();
-  const {loggedInUser} = useLoggedInUserContext()
+  const { setSelectedUser, selectedUser } = useSelectedUserContext();
+  const { loggedInUser } = useLoggedInUserContext();
   const filteredUsers = useMemo(() => {
     return users.filter((user) =>
       (user.first_name + " " + user.last_name)
@@ -31,20 +30,26 @@ export function LocalSearchUser({ users }: LocalSearchUserProps) {
         {filteredUsers.map((user: User) => (
           <li
             key={user.user_id}
-            className={`user-list w-[80%] flex items-center space-x-2 p-[5%] ml-5 mt-2 ${user.user_id === selectedUser?.user_id ? 'bg-gray-400 text-black rounded-xl' : 'hover:bg-gray-100'}` }
-            onClick={()=>setSelectedUser(user)}
+            className={`user-list w-[80%] flex items-center space-x-2 p-[5%] ml-5 mt-2 ${
+              user.user_id === selectedUser?.user_id
+                ? "bg-gray-400 text-black rounded-xl"
+                : "hover:bg-gray-100"
+            }`}
+            onClick={() => setSelectedUser(user)}
           >
             <img
               src={user.profile_photo}
               className="user-profile-image w-8 h-8 rounded-full cursor-pointer"
-            />{
-              user.user_id == loggedInUser?.user_id ? ( <span className="user-name">
+            />
+            {user.user_id == loggedInUser?.user_id ? (
+              <span className="user-name">
                 {user.first_name + " " + user.last_name + " (You)"}
-              </span>):( <span className="user-name">
+              </span>
+            ) : (
+              <span className="user-name">
                 {user.first_name + " " + user.last_name}
-              </span>)
-            }
-           
+              </span>
+            )}
           </li>
         ))}
       </ul>

@@ -5,13 +5,14 @@ import { ShowChatData } from "./index";
 import { chatDownload, fetchChatData } from "@/api/handler";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
+import type { chatProps } from "@/interface/interface";
 
-export function Chat() {
+export function Chat({ users, setUsers }: chatProps) {
   const { selectedUser, setSelectedUser } = useSelectedUserContext();
   const { loggedInUser } = useLoggedInUserContext();
   const [loading, setLoading] = useState(false);
   const [chatData, setChatData] = useState([]);
-
+  console.log(users);
   useEffect(() => {
     if (!selectedUser) {
       setSelectedUser(loggedInUser!);
@@ -105,7 +106,7 @@ export function Chat() {
           )}
         </div>
       </div>
-      <ShowChatData ChatData={chatData} />
+      <ShowChatData ChatData={chatData} users={users} setUsers={setUsers} />
     </>
   );
 }

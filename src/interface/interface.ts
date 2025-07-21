@@ -1,3 +1,4 @@
+import type { Dispatch, SetStateAction } from "react";
 
 export interface User {
     user_id?: number;
@@ -58,3 +59,7 @@ export interface User {
     groupUsers:User[]
   };
  
+  export interface chatProps{
+    users:User[],
+    setUsers : Dispatch<SetStateAction<User[]>>
+  }

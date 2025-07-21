@@ -1,10 +1,19 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type Dispatch,
+  type SetStateAction,
+} from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 import { io } from "socket.io-client";
 import { useLoggedInUserContext } from "@/features/user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
+import type { User } from "@/interface/interface";
+import { chattingUsers } from "@/api/chat.api";
 
 interface Chat {
   sender_id: number;
@@ -15,13 +24,15 @@ interface Chat {
 
 interface ChatDataTypeProps {
   ChatData: Chat[] | null;
+  users: User[];
+  setUsers: Dispatch<SetStateAction<User[]>>;
 }
 
 const socket = io("http://localhost:4000", {
   withCredentials: true,
 });
 
-export function ShowChatData({ ChatData }: ChatDataTypeProps) {
+export function ShowChatData({ ChatData, users, setUsers }: ChatDataTypeProps) {
   const { loggedInUser } = useLoggedInUserContext();
   const { selectedUser } = useSelectedUserContext();
   const inputMessageRef = useRef<HTMLInputElement>(null);
@@ -58,13 +69,25 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
   }
 
   useEffect(() => {
-    socket.on("send message back", (data: Chat) => {
+    socket.on("send message back", async (data: Chat) => {
+      console.log("chat data is:", data);
       if (
         selectedUser?.user_id == data.receiver_id ||
         selectedUser?.user_id == data.sender_id
       ) {
         setAllMessages((prev) => [...prev, data]);
       }
+      try {
+        const response = await chattingUsers();
+        if (response.data.data) {
+          setUsers(response.data.data);
+        } else {
+          setUsers([]);
+        }
+      } catch (err: any) {
+        throw err;
+      }
+      console.log("set user will called:");
     });
 
     return () => {
@@ -108,7 +131,7 @@ export function ShowChatData({ ChatData }: ChatDataTypeProps) {
                   className="flex mb-4 w-[20%] bg-green-100 ml-auto rounded-md text-left"
                 >
                   <div className="w-full m-2 text-left">
-                    {msg.message} 
+                    {msg.message}
                     <div className="text-xs text-gray-500 mt-1 text-right">
                       {newTime}
                     </div>
