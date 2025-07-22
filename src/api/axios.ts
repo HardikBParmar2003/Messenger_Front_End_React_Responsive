@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const api = axios.create({
   baseURL: "http://localhost:4000",
@@ -15,14 +16,16 @@ api.interceptors.response.use(
   },
   (error) => {
     if (error.response?.status == 400) {
-      alert(error.response?.data.message);
+      toast.error(error.response?.data.message);
     } else if (error.response?.status == 401) {
-      alert(error.response?.data.message);
-      window.location.href = "/login"
+      toast.error(error.response?.data.message);
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
     } else if (error.response?.status == 404) {
-      alert(error.response?.data.message);
+      toast.error(error.response?.data.message);
     } else if (error.response?.status == 500) {
-      alert(error.response?.data.message);
+      toast.error(error.response?.data.message);
     }
     return Promise.reject(error);
   }

@@ -117,8 +117,8 @@ export function ShowGroupChat({
       setTagUser([]);
       setShowDropdown(false);
     }
-    if (inputValue[0] === "@") {
-      const userName = inputValue.slice(1);
+    if (inputValue[inputValue.length - 1] === "@") {
+      const userName = inputValue.slice(inputValue.length);
       const users = allUsers.filter((user) =>
         (user.first_name + " " + user.last_name)
           .toLowerCase()
@@ -155,24 +155,19 @@ export function ShowGroupChat({
                 const newDate: Date = new Date(msg.createdAt);
                 const newTime: string =
                   newDate.getHours() + ":" + newDate.getMinutes();
+
                 return isSender ? (
-                  <div
-                    key={index}
-                    className="flex mb-4 w-[40%] bg-green-100 ml-auto rounded-md"
-                  >
-                    <div className="w-full m-2 text-left">
-                      {msg.message}
+                  <div key={index} className="flex mb-4 rounded-md justify-end">
+                    <div className=" m-2 p-1.5 text-left bg-green-100 max-w-[70%] min-w-[10%] break-words rounded-xl">
+                      <span>{msg.message}</span>
                       <div className="text-xs text-gray-500 mt-1 text-right">
                         {newTime}
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div
-                    key={index}
-                    className="flex  mb-4 w-[40%] bg-white mr-auto  rounded-md"
-                  >
-                    <div className="w-full m-2 text-left">
+                  <div key={index} className="flex mb-4 mr-auto ">
+                    <div className="max-w-[70%] m-2 p-1 bg-white text-left break-words min-w-[20%] rounded-xl ">
                       <div className="flex mb-2">
                         <img
                           src={msg.sender.profile_photo}

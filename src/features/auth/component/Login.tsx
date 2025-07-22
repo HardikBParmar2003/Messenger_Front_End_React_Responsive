@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useLoggedInUserContext } from "@/features/user/hooks";
 import { logInUser } from "@/api/auth.api";
 import { getCookie } from "../function";
+import { toast } from "react-toastify";
 
 export function Login() {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ export function Login() {
   useEffect(() => {
     const token = getCookie("jwt_token");
     if (token) {
-      alert("You are logged in user")
+      alert("You are logged in user");
       navigate("/users");
     }
   }, [navigate]);
@@ -30,8 +31,9 @@ export function Login() {
       const response = await logInUser(formData);
       setLoggedInUser(await response.data.data.userData);
       navigate("/users");
+      toast.success("User log in successful")
     } catch (error) {
-      alert(error);
+      throw error;
     }
   };
 
@@ -64,7 +66,12 @@ export function Login() {
           />
         </div>
         <button type="submit">Log In</button>
-        <Link to="/newUser" className="m-5 bg-blue-100 min-w-50 p-2 rounded-md text-center">New User ?</Link>
+        <Link
+          to="/newUser"
+          className="m-5 bg-blue-100 min-w-50 p-2 rounded-md text-center"
+        >
+          New User ?
+        </Link>
       </form>
     </div>
   );
