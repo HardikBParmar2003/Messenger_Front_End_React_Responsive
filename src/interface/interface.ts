@@ -1,65 +1,69 @@
 import type { Dispatch, SetStateAction } from "react";
 
 export interface User {
-    user_id?: number;
-    first_name?: string;
-    last_name?: string;
-    profile_photo?: string;
-    email?: string;
-    password?: string;
-  }
+  user_id?: number;
+  first_name?: string;
+  last_name?: string;
+  profile_photo?: string;
+  email?: string;
+  password?: string;
+}
 
-  export interface LocalSearchUserProps {
-    users: User[];
-  }
+export interface LocalSearchUserProps {
+  users: User[];
+}
 
-  export interface Group {
-    group_id:number;
-    group_name:string;
-    profile_photo:string;
-    user_id:number
-  }
+export interface Group {
+  group_id: number;
+  group_name: string;
+  profile_photo: string;
+  user_id: number;
+  latestMessageTime?: string;
+}
 
-  export interface AllGroupsProps{
-    groups:Group[]
-  }
+export interface AllGroupsProps {
+  groups: Group[];
+}
 
-  export interface GroupChat{
-    message:string,
-    createdAt:Date,
-    sender:User
-  }
+export interface GroupChat {
+  message: string;
+  createdAt: Date;
+  sender: User;
+}
 
-  export interface GroupChatProps{
-    ChatData : GroupChat[]
-    allUsers:User[]
-  }
+export interface GroupChatProps {
+  ChatData: GroupChat[];
+  allUsers: User[];
+  setAllGroups: React.Dispatch<React.SetStateAction<Group[]>>
+  allGroups:Group[]
 
-  export interface RemoveMemberProps  {
-    isOpen: boolean;
-    onClose: () => void;
-    groupUsers:User[]
-    removeMember : (user_id:number)=>void
-  };
+}
 
-  export interface CloseModelProps {
-    closeModal: () => void;
-    addNewGroup: (group: Group) => void;
-  }
+export interface RemoveMemberProps {
+  isOpen: boolean;
+  onClose: () => void;
+  groupUsers: User[];
+  removeMember: (user_id: number) => void;
+}
 
-  export interface EditGroupProps  {
-    isOpen: boolean;
-    onClose: () => void;
-    onGroupUpdated: (updatedGroup: Group) => void;
-  };
+export interface CloseModelProps {
+  closeModal: () => void;
+  addNewGroup: (group: Group) => void;
+}
 
-  export interface ViewGroupMemberProps  {
-    isOpen: boolean;
-    onClose: () => void;
-    groupUsers:User[]
-  };
- 
-  export interface chatProps{
-    users:User[],
-    setUsers : Dispatch<SetStateAction<User[]>>
-  }
+export interface EditGroupProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onGroupUpdated: (updatedGroup: Group) => void;
+}
+
+export interface ViewGroupMemberProps {
+  isOpen: boolean;
+  onClose: () => void;
+  groupUsers: User[];
+}
+
+export interface chatProps {
+  users: User[];
+  setUsers: Dispatch<SetStateAction<User[]>>;
+}

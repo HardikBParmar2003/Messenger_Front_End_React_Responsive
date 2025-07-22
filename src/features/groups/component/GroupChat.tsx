@@ -11,10 +11,8 @@ import { useSelectedGroupContext } from "../hook";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faDoorOpen,
-  faDownload,
   faEdit,
   faEye,
-  faFile,
   faFilePdf,
   faTrash,
   faUserMinus,
@@ -28,8 +26,15 @@ import { toast } from "react-toastify";
 type GroupUserProps = {
   onUpdateGroup: (updatedGroup: Group) => void;
   onDeleteGroup: (onDeleteGroup: number) => void;
+  setAllGroups: React.Dispatch<React.SetStateAction<Group[]>>;
+  allGroups: Group[];
 };
-export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
+export function GroupChat({
+  onUpdateGroup,
+  onDeleteGroup,
+  setAllGroups,
+  allGroups,
+}: GroupUserProps) {
   const { selectedGroup, setSelectedGroup } = useSelectedGroupContext();
   const { loggedInUser } = useLoggedInUserContext();
   const [chatData, setChatData] = useState([]);
@@ -38,7 +43,6 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
   const [isAddMember, setIsAddMember] = useState<boolean>(false);
   const [isRemoveMember, setIsRemoveMember] = useState<boolean>(false);
   const [isViewMember, setIsViewMember] = useState<boolean>(false);
-  const [groupUserReady, setGroupUserReady] = useState(false);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -58,7 +62,6 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
             const response = await getGroupChat(group_id);
             if (response.data.data.length > 0) {
               setChatData(response.data.data);
-              setGroupUserReady(true);
             } else {
               setChatData([]);
             }
@@ -69,7 +72,6 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
         throw error;
       }
     }
-    setGroupUserReady(false);
     FetchUserChatData();
   }, [selectedGroup]);
 
@@ -227,7 +229,12 @@ export function GroupChat({ onUpdateGroup, onDeleteGroup }: GroupUserProps) {
         )}
       </div>
       {selectedGroup && (
-        <ShowGroupChat ChatData={chatData} allUsers={groupUser} />
+        <ShowGroupChat
+          ChatData={chatData}
+          allUsers={groupUser}
+          setAllGroups={setAllGroups}
+          allGroups={allGroups}
+        />
       )}
 
       {isEditOpen && (

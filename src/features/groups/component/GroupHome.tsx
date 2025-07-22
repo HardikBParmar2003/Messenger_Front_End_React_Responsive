@@ -10,6 +10,9 @@ import CreateGroupModal from "./CreateGroupModal";
 export function GroupHome() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [isModal, setIsModal] = useState<boolean>(false);
+
+
+
   useEffect(() => {
     async function fetchAllGroups() {
       try {
@@ -60,6 +63,8 @@ export function GroupHome() {
             <GroupChat
               onUpdateGroup={updatedGroups}
               onDeleteGroup={onDeleteGroup}
+              setAllGroups={setAllGroups}
+              allGroups={allGroups}
             />
           </div>
           <div className="w-[25%]  h-[80%] border- border-gray-400 bg-anmber-400">

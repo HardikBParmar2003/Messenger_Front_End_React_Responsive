@@ -1,2 +1,4 @@
 export * from "./Login"
 export * from "./Signup"
+export * from "./Email"
+export * from "./VerifyEmail"

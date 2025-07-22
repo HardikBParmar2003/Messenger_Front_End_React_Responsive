@@ -10,7 +10,7 @@ import { VerifyEmail } from "./features/auth/component/VerifyEmail";
 import { ToastNotify } from "./features/home/component";
 
 export const App: FC = () => {
-  const { loggedInUser, loading } = useLoggedInUserContext();
+  const { loading } = useLoggedInUserContext();
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
@@ -27,6 +27,7 @@ export const App: FC = () => {
     <>
       <Routes>
         <Route path="/" element={<Navigate to="/login" />} />
+        
         <Route path="/newUser" element={<Email />} />
         <Route path="/verifyOtp" element={<VerifyEmail />} />
         <Route path="/signup" element={<Signup />} />

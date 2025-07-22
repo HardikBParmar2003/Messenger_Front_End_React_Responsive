@@ -1,4 +1,9 @@
-import type { GroupChat, GroupChatProps, User } from "@/interface/interface";
+import type {
+  Group,
+  GroupChat,
+  GroupChatProps,
+  User,
+} from "@/interface/interface";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -10,7 +15,12 @@ const socket = io("http://localhost:4000", {
   withCredentials: true,
 });
 
-export function ShowGroupChat({ ChatData, allUsers }: GroupChatProps) {
+export function ShowGroupChat({
+  ChatData,
+  allUsers,
+  setAllGroups,
+  allGroups,
+}: GroupChatProps) {
   const [allMessages, setAllMessages] = useState<GroupChat[]>(ChatData || []);
   const { selectedGroup } = useSelectedGroupContext();
   const { loggedInUser } = useLoggedInUserContext();
@@ -52,12 +62,34 @@ export function ShowGroupChat({ ChatData, allUsers }: GroupChatProps) {
     }
   }
 
+  const sortGroups = (groups: Group[]) => {
+    console.log("groups in sorting");
+    return groups.sort((a: Group, b: Group) => {
+      const timeA = new Date(a.latestMessageTime as string).getTime();
+      const timeB = new Date(b.latestMessageTime as string).getTime();
+      return timeB - timeA;
+    });
+  };
+
   useEffect(() => {
     if (!selectedGroup) return;
     socket.on("send group message back", (data) => {
       if (selectedGroup?.group_id == data.group_id) {
         setAllMessages((prev) => [...prev, data]);
+        console.log("before update All groups is:", allGroups);
       }
+      setAllGroups((prevGroups) => {
+        const updatedGroups = prevGroups.map((group) => {
+          if (group.group_id === data.group_id) {
+            return { ...group, latestMessageTime: data.createdAt };
+          }
+          return group;
+        });
+
+        const sortedGroups = sortGroups(updatedGroups);
+        console.log("sorted group is::", sortedGroups);
+        return sortedGroups;
+      });
     });
     return () => {
       socket.off("send group message back");
