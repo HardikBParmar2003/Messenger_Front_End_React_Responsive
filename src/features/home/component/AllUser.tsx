@@ -1,5 +1,5 @@
 import { SelectedUserContextProvider } from "@/features/chat/hooks/index";
-import { useEffect, useState, type FC, type SetStateAction } from "react";
+import { useEffect, useState, type FC } from "react";
 import { GlobalSearchUser, LocalSearchUser } from "../../user/components/index";
 import { Chat } from "../../chat/components/index";
 import { chattingUsers } from "@/api/handler";

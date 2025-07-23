@@ -9,7 +9,7 @@ export function VerifyEmail() {
   useEffect(() => {
     const user_email = getCookie("user_email");
     if (!user_email) {
-      navigate("/login");
+      navigate("/auth/login");
     }
   }, []);
 
@@ -18,9 +18,9 @@ export function VerifyEmail() {
     e.preventDefault();
     const formData = new FormData();
     formData.append("otp", otp);
-    const response = await verifyOtp(formData);
+    await verifyOtp(formData);
     alert("OTP successfuly verified complete sign up process within 5 minutes");
-    navigate("/signup");
+    navigate("/auth/signup");
   };
   return (
     <div className="bg--200 flex justify-center items-center min-h-screen">

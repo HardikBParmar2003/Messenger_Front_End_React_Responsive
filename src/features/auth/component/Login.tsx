@@ -12,13 +12,12 @@ export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setLoggedInUser } = useLoggedInUserContext();
-  const isToken = getCookie("jwt_token");
 
   useEffect(() => {
     const token = getCookie("jwt_token");
     if (token) {
       alert("You are logged in user");
-      navigate("/users");
+      navigate("/home/");
     }
   }, [navigate]);
 
@@ -30,7 +29,7 @@ export function Login() {
     try {
       const response = await logInUser(formData);
       setLoggedInUser(await response.data.data.userData);
-      navigate("/users");
+      navigate("/home");
       toast.success("User log in successful")
     } catch (error) {
       throw error;
@@ -67,7 +66,7 @@ export function Login() {
         </div>
         <button type="submit">Log In</button>
         <Link
-          to="/newUser"
+          to="/auth/newUser"
           className="m-5 bg-blue-100 min-w-50 p-2 rounded-md text-center"
         >
           New User ?

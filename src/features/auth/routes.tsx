@@ -1,11 +1,21 @@
-import { Route, Routes } from "react-router";
-import { Email, Login, Signup, VerifyEmail } from "./component/index"
+import { type RouteObject } from "react-router-dom";
+import { Email, Login, Signup, VerifyEmail } from "./component";
 
-export const AuthRoutes = () => (
-  <Routes>
-    <Route path="login" element={<Login />} />
-    <Route path="signup" element={<Signup />} />
-    <Route path="newUser" element={<Email />} />
-    <Route path="verifyOtp" element={<VerifyEmail />} />
-  </Routes>
-);
+export const AuthRoutes: RouteObject[] = [
+  {
+    path: "login",
+    element: <Login />,
+  },
+  {
+    path: "signup",
+    element: <Signup />,
+  },
+  {
+    path: "newUser",
+    element: <Email />,
+  },
+  {
+    path: "verifyOtp",
+    element: <VerifyEmail />,
+  },
+];

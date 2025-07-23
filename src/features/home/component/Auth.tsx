@@ -5,7 +5,7 @@ export const Auth =<P extends object> (InputComponent:React.ComponentType<P>) =>
   return function OutPutComponent(props:P) {
     const { loggedInUser } = useLoggedInUserContext();
     if (!loggedInUser) {
-      return <Navigate to="/login" replace />;
+      return <Navigate to="/auth/login" replace />;
     } else {
       return <InputComponent {...props} />;
     }

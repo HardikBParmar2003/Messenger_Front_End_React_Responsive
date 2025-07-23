@@ -16,6 +16,7 @@ interface loggedInUserType {
   setLoggedInUser: (user: User) => void;
   loading: boolean;
 }
+
 const LoggedInUserContext = createContext<loggedInUserType | undefined>(
   undefined
 );
@@ -26,7 +27,7 @@ export function LoggedInUserContextProvider({ children }: any) {
   useEffect(() => {
     async function isUSer() {
       try {
-        if(!getCookie("jwt_token")) return
+        if (!getCookie("jwt_token")) return;
         const response = await individualUser();
         if (response.data.data) {
           setLoggedInUser(response.data.data);

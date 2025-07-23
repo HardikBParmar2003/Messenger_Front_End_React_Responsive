@@ -1,5 +1,5 @@
 import { createGroup } from "@/api/group.api";
-import type { CloseModelProps, Group } from "@/interface/interface";
+import type { CloseModelProps } from "@/interface/interface";
 import { useState } from "react";
 import { toast } from "react-toastify";
 

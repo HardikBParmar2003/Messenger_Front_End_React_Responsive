@@ -20,7 +20,7 @@ api.interceptors.response.use(
     } else if (error.response?.status == 401) {
       toast.error(error.response?.data.message);
       setTimeout(() => {
-        window.location.href = "/login";
+        window.location.href = "/auth/login";
       }, 2000);
     } else if (error.response?.status == 404) {
       toast.error(error.response?.data.message);

@@ -13,7 +13,6 @@ export function Chat({ users, setUsers }: chatProps) {
   const { loggedInUser } = useLoggedInUserContext();
   const [loading, setLoading] = useState(false);
   const [chatData, setChatData] = useState([]);
-  console.log(users);
   useEffect(() => {
     if (!selectedUser) {
       setSelectedUser(loggedInUser!);

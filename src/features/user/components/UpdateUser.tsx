@@ -4,7 +4,6 @@ import { useForm } from "react-hook-form";
 import "../style/Form.css";
 import { useLoggedInUserContext } from "../hooks";
 import { updateUser } from "@/api/handler";
-import { faL } from "@fortawesome/free-solid-svg-icons";
 
 export function UpdateUser() {
   const { register, handleSubmit } = useForm();
@@ -41,7 +40,7 @@ export function UpdateUser() {
       }
       const response = await updateUser(formData);
       setLoggedInUser(response.data.data);
-      navigate("/users");
+      navigate("/home");
     } catch (error) {
       setLoading(false);
       throw error;

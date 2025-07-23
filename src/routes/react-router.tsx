@@ -1,18 +1,23 @@
-import { AppLayout } from "@/components";
-// import { ProductRoutes } from "@/features/user/routes";
-import { createBrowserRouter, type RouteObject } from "react-router";
+import { AuthRoutes } from "@/features/auth/routes";
+import { groupRoutes } from "@/features/groups/group.routes";
+import { UserRoutes } from "@/features/user/components/user.routes";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 
-const routes: RouteObject[] = [
+export const router = createBrowserRouter([
   {
     path: "/",
-    element: <AppLayout />,
-    children: [
-      {
-        path: "/product/*",
-        // element: <ProductRoutes />, // We can also manage all routes here rather than create specific route file
-      },
-    ],
+    element: <Navigate to="/auth/login" replace />,
   },
-];
-
-export const  router = createBrowserRouter(routes);
+  {
+    path: "/auth/*",
+    children: AuthRoutes,
+  },
+  {
+    path: "/home/*",
+    children: UserRoutes,
+  },
+  {
+    path: "/group/*",
+    children: groupRoutes,
+  },
+]);

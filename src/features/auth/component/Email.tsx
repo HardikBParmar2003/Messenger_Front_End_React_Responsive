@@ -11,9 +11,9 @@ export function Email() {
       e.preventDefault();
       const formData = new FormData();
       formData.append("email", email);
-      const response = await sendOtp(formData);
+      await sendOtp(formData);
       alert(`OTP sent to ${email} `);
-      navigate("/verifyOtp");
+      navigate("/auth/verifyOtp");
     } catch (error) {
       setLoading(false);
       throw error;

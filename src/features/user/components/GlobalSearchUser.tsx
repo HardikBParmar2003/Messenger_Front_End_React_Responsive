@@ -17,15 +17,12 @@ export const GlobalSearchUser: FC = () => {
   const { setSelectedUser } = useSelectedUserContext();
 
   useEffect(() => {
-    console.log("useEffect triggered, value:", value, "page:", page);
     const debouncingFunction = setTimeout(() => {
-      console.log("in time out");
       if (value.trim() === "") {
         setSearchUsers([]);
         setTotalPages(1);
         return;
       }
-      console.log("in fetch user");
       async function fetchUsers() {
         const params = new URLSearchParams({
           value,
@@ -37,7 +34,6 @@ export const GlobalSearchUser: FC = () => {
         const response = await findUser(params.toString());
         const users = response.data.data || [];
         const totalCount = response.data.totalRows || 0;
-        console.log("total counr is:", totalCount);
         setSearchUsers(users);
         setTotalPages(Math.ceil(totalCount / 10));
       }
@@ -51,9 +47,6 @@ export const GlobalSearchUser: FC = () => {
     if (newPage < 1 || newPage > totalPages) return;
     setPage(newPage);
   };
-
-  console.log("total pages is:", totalPages);
-  console.log("input value is:", value);
 
   return (
     <div>

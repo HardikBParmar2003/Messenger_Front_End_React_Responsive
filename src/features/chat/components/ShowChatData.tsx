@@ -32,7 +32,7 @@ const socket = io("http://localhost:4000", {
   withCredentials: true,
 });
 
-export function ShowChatData({ ChatData, users, setUsers }: ChatDataTypeProps) {
+export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   const { loggedInUser } = useLoggedInUserContext();
   const { selectedUser } = useSelectedUserContext();
   const inputMessageRef = useRef<HTMLInputElement>(null);
@@ -70,7 +70,6 @@ export function ShowChatData({ ChatData, users, setUsers }: ChatDataTypeProps) {
 
   useEffect(() => {
     socket.on("send message back", async (data: Chat) => {
-      console.log("chat data is:", data);
       if (
         (data.sender_id === selectedUser?.user_id &&
           data.receiver_id === loggedInUser?.user_id) ||
@@ -80,8 +79,6 @@ export function ShowChatData({ ChatData, users, setUsers }: ChatDataTypeProps) {
         setAllMessages((prev) => [...prev, data]);
       }
       try {
-        console.log("logged in user id is:", loggedInUser);
-        console.log("data is:", data);
         if (
           loggedInUser?.user_id == data.sender_id ||
           loggedInUser?.user_id == data.receiver_id
@@ -96,7 +93,6 @@ export function ShowChatData({ ChatData, users, setUsers }: ChatDataTypeProps) {
       } catch (err: any) {
         throw err;
       }
-      console.log("set user will called:");
     });
 
     return () => {

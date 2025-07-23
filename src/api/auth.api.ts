@@ -11,7 +11,7 @@ export const verifyOtp = (formData:FormData)=>{
 }
   
 export const logInUser = (data: FormData) => {
-  return api.post("/user/loginUser", data); // No need to send cookie
+  return api.post("/user/loginUser", data);
 };
 
 export const logOutUser = () => {

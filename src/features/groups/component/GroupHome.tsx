@@ -11,8 +11,6 @@ export function GroupHome() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [isModal, setIsModal] = useState<boolean>(false);
 
-
-
   useEffect(() => {
     async function fetchAllGroups() {
       try {
@@ -24,6 +22,7 @@ export function GroupHome() {
     }
     fetchAllGroups();
   }, []);
+
   const closeModal = () => {
     setIsModal(false);
   };

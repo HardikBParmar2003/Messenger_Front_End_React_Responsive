@@ -6,11 +6,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { signUpUser } from "@/api/handler";
 import { useNavigate } from "react-router";
+import { useEffect } from "react";
+import { getCookie } from "../function";
 
 export type SignUpFormData = z.infer<typeof SignUpSchema>;
 
 export function Signup() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -18,10 +20,18 @@ export function Signup() {
   } = useForm<SignUpFormData>({
     resolver: zodResolver(SignUpSchema),
   });
+
+  useEffect(() => {
+    const token = getCookie("user_email");
+    if (!token) {
+      alert("First verify Email");
+      navigate("/auth/newUser");
+    }
+  }, [navigate]);
   const onSubmit = async (data: SignUpFormData) => {
-    const response = await signUpUser(data)
-    alert("Successfull login")
-    navigate("/login")
+    await signUpUser(data);
+    alert("Successfull login");
+    navigate("/auth/login");
   };
 
   return (

@@ -19,7 +19,6 @@ export function ShowGroupChat({
   ChatData,
   allUsers,
   setAllGroups,
-  allGroups,
 }: GroupChatProps) {
   const [allMessages, setAllMessages] = useState<GroupChat[]>(ChatData || []);
   const { selectedGroup } = useSelectedGroupContext();
@@ -63,7 +62,6 @@ export function ShowGroupChat({
   }
 
   const sortGroups = (groups: Group[]) => {
-    console.log("groups in sorting");
     return groups.sort((a: Group, b: Group) => {
       const timeA = new Date(a.latestMessageTime as string).getTime();
       const timeB = new Date(b.latestMessageTime as string).getTime();
@@ -76,7 +74,6 @@ export function ShowGroupChat({
     socket.on("send group message back", (data) => {
       if (selectedGroup?.group_id == data.group_id) {
         setAllMessages((prev) => [...prev, data]);
-        console.log("before update All groups is:", allGroups);
       }
       setAllGroups((prevGroups) => {
         const updatedGroups = prevGroups.map((group) => {
@@ -87,7 +84,6 @@ export function ShowGroupChat({
         });
 
         const sortedGroups = sortGroups(updatedGroups);
-        console.log("sorted group is::", sortedGroups);
         return sortedGroups;
       });
     });
