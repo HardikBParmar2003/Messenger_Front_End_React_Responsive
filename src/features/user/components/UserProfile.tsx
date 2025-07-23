@@ -26,7 +26,6 @@ export function UserProfile({  onClose, userId }: userProfileTypes) {
     }
     isUSer();
   }, [userId]);
-  console.log("user is:", user);
   return (
     <div className="fixed inset-0  bg-opacity-40 flex justify-center items-center z-50">
       {loading ? (
