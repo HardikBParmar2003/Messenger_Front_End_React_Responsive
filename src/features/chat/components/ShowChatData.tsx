@@ -24,7 +24,7 @@ interface Chat {
 
 interface ChatDataTypeProps {
   ChatData: Chat[] | null;
-  users: User[];
+  // users: User[];
   setUsers: Dispatch<SetStateAction<User[]>>;
 }
 
@@ -61,9 +61,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
       const receiver_id: number = Number(selectedUser?.user_id);
-
       socket.emit("send message", sender_id, receiver_id, message);
-
       inputMessageRef.current.value = "";
     }
   }
@@ -90,7 +88,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
             setUsers([]);
           }
         }
-      } catch (err: any) {
+      } catch (err) {
         throw err;
       }
     });
@@ -114,6 +112,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
       });
     }
   }, [allMessages]);
+
   return (
     <div className="flex flex-col h-[92%] ">
       <div
@@ -130,7 +129,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
               const newDate: Date = new Date(msg.createdAt);
               const newTime: string =
                 newDate.getHours() + ":" + newDate.getMinutes();
-              return isSender ? ( // I can also user conditional class name
+              return isSender ? ( // I can also user conditional class name but I have used it once so I practice this
                 <div
                   key={index}
                   className="flex mb-4 w-[20%] bg-green-100 ml-auto rounded-md text-left"

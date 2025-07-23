@@ -13,6 +13,13 @@ export interface LocalSearchUserProps {
   users: User[];
 }
 
+export interface Chat {
+  sender_id: number;
+  receiver_id: number;
+  message: string;
+  createdAt: Date;
+}
+
 export interface Group {
   group_id: number;
   group_name: string;
@@ -66,4 +73,15 @@ export interface ViewGroupMemberProps {
 export interface chatProps {
   users: User[];
   setUsers: Dispatch<SetStateAction<User[]>>;
+}
+
+export interface loggedInUserType {
+  loggedInUser: User | null;
+  setLoggedInUser: (user: User) => void;
+  loading: boolean;
+}
+
+export interface SelectedGroupContextType {
+  selectedGroup: Group | null;
+  setSelectedGroup: (group: Group | null) => void;
 }

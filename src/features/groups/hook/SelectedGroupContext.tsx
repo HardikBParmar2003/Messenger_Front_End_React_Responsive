@@ -1,10 +1,6 @@
-import type { Group } from "@/interface/interface";
+import type { Group, SelectedGroupContextType } from "@/interface/interface";
 import { createContext, useContext, useState } from "react";
 
-interface SelectedGroupContextType {
-  selectedGroup: Group | null;
-  setSelectedGroup: (group: Group | null) => void;
-}
 const SelectedGroupContext = createContext<
   SelectedGroupContextType | undefined
 >(undefined);

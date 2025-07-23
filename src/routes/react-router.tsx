@@ -1,6 +1,6 @@
-import { AuthRoutes } from "@/features/auth/routes";
+import { AuthRoutes } from "@/features/auth/auth.routes";
 import { groupRoutes } from "@/features/groups/group.routes";
-import { UserRoutes } from "@/features/user/components/user.routes";
+import { UserRoutes } from "@/features/user/user.routes";
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 export const router = createBrowserRouter([

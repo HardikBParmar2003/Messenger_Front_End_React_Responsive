@@ -95,6 +95,7 @@ export function GroupChat({
       const response = await deleteGroupData(Number(selectedGroup?.group_id));
       onDeleteGroup(response.data.data.group_id);
       setSelectedGroup(null);
+      toast.success("Group deleted successfully");
     }
   };
 
@@ -107,6 +108,7 @@ export function GroupChat({
       await userLeftGroup(group_id);
       setSelectedGroup(null);
       onDeleteGroup(group_id);
+      toast.success("User left fro the group successfuly");
     } else {
       return;
     }

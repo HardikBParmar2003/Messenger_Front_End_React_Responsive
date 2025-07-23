@@ -5,8 +5,8 @@ export const LogOut = async () => {
   let final: boolean = confirm("You want to log out ?");
   if (final) {
     await logOutUser();
-    toast.success("Log out successfully");
     window.location.href = "/auth/login";
+    toast.success("Log out successfully");
   } else {
     return;
   }

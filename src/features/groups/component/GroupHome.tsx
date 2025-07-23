@@ -68,7 +68,7 @@ export function GroupHome() {
           </div>
           <div className="w-[25%]  h-[80%] border- border-gray-400 bg-anmber-400">
             <button
-              className="bg-gray-400 p-2 m-1 border rounded-xl text-2xl hover:bg-white border-gray-800"
+             className="bg-gray-700 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded w-[70%]"
               onClick={() => setIsModal(true)}
             >
               Create Group

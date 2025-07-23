@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import "../style/Form.css";
 import { useLoggedInUserContext } from "../hooks";
 import { updateUser } from "@/api/handler";
+import { toast } from "react-toastify";
 
 export function UpdateUser() {
   const { register, handleSubmit } = useForm();
@@ -41,6 +42,7 @@ export function UpdateUser() {
       const response = await updateUser(formData);
       setLoggedInUser(response.data.data);
       navigate("/home");
+      toast.success("Profile updated successfully");
     } catch (error) {
       setLoading(false);
       throw error;

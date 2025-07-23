@@ -1,6 +1,6 @@
-import { useForm } from "react-hook-form";
 import "../../../App.css";
 import "../../user/style/Form.css";
+import { useForm } from "react-hook-form";
 import { SignUpSchema } from "../schema/SignUpSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,6 +8,7 @@ import { signUpUser } from "@/api/handler";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { getCookie } from "../function";
+import { toast } from "react-toastify";
 
 export type SignUpFormData = z.infer<typeof SignUpSchema>;
 
@@ -30,8 +31,8 @@ export function Signup() {
   }, [navigate]);
   const onSubmit = async (data: SignUpFormData) => {
     await signUpUser(data);
-    alert("Successfull login");
     navigate("/auth/login");
+    toast.success("Successfull login");
   };
 
   return (

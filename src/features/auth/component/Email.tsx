@@ -1,10 +1,13 @@
 import { sendOtp } from "@/api/handler";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+
 export function Email() {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
   const handleSubmit = async (e: any) => {
     try {
       setLoading(true);
@@ -12,8 +15,10 @@ export function Email() {
       const formData = new FormData();
       formData.append("email", email);
       await sendOtp(formData);
-      alert(`OTP sent to ${email} `);
-      navigate("/auth/verifyOtp");
+      toast.success(`OTP sent to ${email} `);
+      setTimeout(() => {
+        navigate("/auth/verifyOtp");
+      }, 3000);
     } catch (error) {
       setLoading(false);
       throw error;
