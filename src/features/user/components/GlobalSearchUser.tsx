@@ -12,8 +12,8 @@ interface User {
 export const GlobalSearchUser: FC = () => {
   const [value, setSearchValue] = useState("");
   const [searchUsers, setSearchUsers] = useState<User[]>([]);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const { setSelectedUser } = useSelectedUserContext();
 
   useEffect(() => {
@@ -37,7 +37,6 @@ export const GlobalSearchUser: FC = () => {
         setSearchUsers(users);
         setTotalPages(Math.ceil(totalCount / 10));
       }
-
       fetchUsers();
     }, 300);
     return () => clearTimeout(debouncingFunction);
@@ -74,7 +73,7 @@ export const GlobalSearchUser: FC = () => {
                 {user.first_name} {user.last_name}
               </span>
               <button
-                className="ml-auto bg-gray-300 rounded-md p-1.5 hover:ring-2 hover:ring-blue-500"
+                className="ml-auto bg-gray-300 rounded-md p-1.5 hover:ring-3 hover:ring-gray-500"
                 onClick={() => setSelectedUser(user)}
               >
                 Chat
@@ -91,7 +90,7 @@ export const GlobalSearchUser: FC = () => {
           <button
             onClick={() => goToPage(page - 1)}
             disabled={page === 1}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 hover:ring-3 hover:ring-gray-500"
           >
             Prev
           </button>
@@ -101,7 +100,9 @@ export const GlobalSearchUser: FC = () => {
               key={num}
               onClick={() => goToPage(num)}
               className={`px-3 py-1 rounded ${
-                num === page ? "bg-blue-500 text-white" : "bg-gray-200"
+                num === page
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 hover:ring-2 hover:ring-gray-400"
               }`}
             >
               {num}
@@ -111,7 +112,7 @@ export const GlobalSearchUser: FC = () => {
           <button
             onClick={() => goToPage(page + 1)}
             disabled={page === totalPages}
-            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
+            className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 hover:ring-3 hover:ring-gray-500"
           >
             Next
           </button>

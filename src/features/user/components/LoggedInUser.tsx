@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useLoggedInUserContext } from "../hooks/index";
+
 export function LoggedInUserComponent() {
   const navigate = useNavigate();
   const { loggedInUser } = useLoggedInUserContext();

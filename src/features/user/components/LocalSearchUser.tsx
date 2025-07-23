@@ -2,9 +2,13 @@ import { useSelectedUserContext } from "@/features/chat/hooks";
 import { useMemo, useState } from "react";
 import type { LocalSearchUserProps, User } from "@/interface/interface";
 import { useLoggedInUserContext } from "../hooks";
+import { UserProfile } from "./UserProfile";
 
 export function LocalSearchUser({ users }: LocalSearchUserProps) {
-  const [searchValue, setSearchValue] = useState("");
+  const [searchValue, setSearchValue] = useState<string>("");
+  const [modal, setModal] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number>();
+
   const { setSelectedUser, selectedUser } = useSelectedUserContext();
   const { loggedInUser } = useLoggedInUserContext();
   const filteredUsers = useMemo(() => {
@@ -14,6 +18,10 @@ export function LocalSearchUser({ users }: LocalSearchUserProps) {
         .includes(searchValue.toLowerCase())
     );
   }, [searchValue, users]);
+
+  const onClose = () => {
+    setModal(false);
+  };
 
   return (
     <div>
@@ -30,16 +38,20 @@ export function LocalSearchUser({ users }: LocalSearchUserProps) {
         {filteredUsers.map((user: User) => (
           <li
             key={user.user_id}
-            className={`user-list w-[80%] flex items-center space-x-2 p-[5%] ml-5 mt-2 ${
+            className={`user-list w-[80%] flex items-center space-x-2 p-[5%] ml-5 mt-2 cursor-pointer ${
               user.user_id === selectedUser?.user_id
                 ? "bg-gray-400 text-black rounded-xl"
-                : "hover:bg-gray-100"
+                : "hover:bg-gray-300 rounded-xl"
             }`}
             onClick={() => setSelectedUser(user)}
           >
             <img
               src={user.profile_photo}
               className="user-profile-image w-8 h-8 rounded-full cursor-pointer"
+              onClick={() => {
+                setModal(true);
+                setUserId(user.user_id);
+              }}
             />
             {user.user_id == loggedInUser?.user_id ? (
               <span className="user-name">
@@ -53,6 +65,7 @@ export function LocalSearchUser({ users }: LocalSearchUserProps) {
           </li>
         ))}
       </ul>
+      {modal && <UserProfile onClose={onClose} userId={Number(userId)} />}
     </div>
   );
 }

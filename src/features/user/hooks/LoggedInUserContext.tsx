@@ -1,21 +1,7 @@
 import { individualUser } from "@/api/handler";
 import { getCookie } from "@/features/auth/function";
+import type { loggedInUserType, User } from "@/interface/interface";
 import { createContext, useContext, useEffect, useState } from "react";
-
-interface User {
-  user_id?: number;
-  first_name?: string;
-  last_name?: string;
-  profile_photo?: string;
-  email?: string;
-  password?: string;
-}
-
-interface loggedInUserType {
-  loggedInUser: User | null;
-  setLoggedInUser: (user: User) => void;
-  loading: boolean;
-}
 
 const LoggedInUserContext = createContext<loggedInUserType | undefined>(
   undefined
@@ -42,6 +28,7 @@ export function LoggedInUserContextProvider({ children }: any) {
     }
     isUSer();
   }, []);
+
   return (
     <LoggedInUserContext.Provider
       value={{ loggedInUser, setLoggedInUser, loading }}

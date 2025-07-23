@@ -37,7 +37,7 @@ export const AllUser: FC = () => {
       <NavBar />
       <SelectedUserContextProvider>
         <div className="flex h-screen m-5">
-          <div className="w-[25%]  h-[80%] border- border-gray-400 bg-anmber-400">
+          <div className="w-[25%] h-[80%] border- border-gray-400 bg-anmber-400">
             <LocalSearchUser users={users} />
           </div>
           <div className="w-[53%] h-[80%] border border-gray-400 bg-gray-300">

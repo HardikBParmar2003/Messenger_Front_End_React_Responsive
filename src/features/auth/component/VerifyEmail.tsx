@@ -2,6 +2,7 @@ import { verifyOtp } from "@/api/handler";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getCookie } from "../function";
+import { toast } from "react-toastify";
 
 export function VerifyEmail() {
   const navigate = useNavigate();
@@ -9,7 +10,10 @@ export function VerifyEmail() {
   useEffect(() => {
     const user_email = getCookie("user_email");
     if (!user_email) {
-      navigate("/auth/login");
+      toast.error("First verify email");
+      setTimeout(() => {
+        navigate("/auth/login");
+      }, 3000);
     }
   }, []);
 

@@ -1,6 +1,6 @@
 import {  type RouteObject } from "react-router";
 import { Auth } from "@/features/home/component/Auth";
-import { AllUser, UpdateUser } from ".";
+import { AllUser, UpdateUser } from "./components";
 
 
 const ProtectedAllUser = Auth(AllUser);

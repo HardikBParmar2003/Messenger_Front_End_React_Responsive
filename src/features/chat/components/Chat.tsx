@@ -1,24 +1,24 @@
+import { chatDownload, fetchChatData } from "@/api/handler";
+import type { Chat, chatProps } from "@/interface/interface";
+import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { useLoggedInUserContext } from "../../user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { ShowChatData } from "./index";
-import { chatDownload, fetchChatData } from "@/api/handler";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faFilePdf } from "@fortawesome/free-solid-svg-icons";
-import type { chatProps } from "@/interface/interface";
-import { toast } from "react-toastify";
 
 export function Chat({ users, setUsers }: chatProps) {
   const { selectedUser, setSelectedUser } = useSelectedUserContext();
   const { loggedInUser } = useLoggedInUserContext();
-  const [loading, setLoading] = useState(false);
-  const [chatData, setChatData] = useState([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [chatData, setChatData] = useState<Chat[]>([]);
   useEffect(() => {
     if (!selectedUser) {
       setSelectedUser(loggedInUser!);
     }
     const user_id: number = Number(selectedUser?.user_id);
-    async function FetchChatData() {
+    async function FetchChatData():Promise<void> {
       try {
         if (user_id) {
           const response = await fetchChatData(user_id);
@@ -47,7 +47,6 @@ export function Chat({ users, setUsers }: chatProps) {
       };
       const response = await chatDownload(data);
       toast.success(response.data.message);
-
       setLoading(false);
     } catch (error) {
       throw error;
@@ -107,7 +106,7 @@ export function Chat({ users, setUsers }: chatProps) {
           )}
         </div>
       </div>
-      <ShowChatData ChatData={chatData} users={users} setUsers={setUsers} />
+      <ShowChatData ChatData={chatData} setUsers={setUsers} />
     </>
   );
 }
