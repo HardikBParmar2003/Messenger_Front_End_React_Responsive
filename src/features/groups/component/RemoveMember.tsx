@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { useLoggedInUserContext } from "@/features/user/hooks";
 import { useSelectedGroupContext } from "../hook";
 import { removeUser } from "@/api/handler";
+import { socket } from "./ShowGroupChat";
 
 export function RemoveMember({
   isOpen,
@@ -29,6 +30,7 @@ export function RemoveMember({
     formData.append("member_id", user_id);
     formData.append("group_id", group_id);
     await removeUser(formData);
+    socket.emit("remove member",user_id,group_id)
     removeMember(user.user_id as number);
   };
 
@@ -58,7 +60,7 @@ export function RemoveMember({
         <ul className="w-[90%]  m-2 p-5 overflow-y-auto h-[70%]">
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user: User) => (
-              <>
+              <div key={user.user_id}>
                 {user.user_id !== loggedInUser?.user_id && (
                   <li
                     key={user.user_id}
@@ -66,7 +68,7 @@ export function RemoveMember({
                   >
                     <img
                       src={user.profile_photo}
-                      className="user-profile-image cursor-pointer w-8 h-8 rounded-full"
+                      className="user-profile-image cursor-pointer w-8 h-8 rounded-full ring-2 ring-red-200"
                     />
                     <span className="user-name w-[290px] ">
                       {user.first_name + " " + user.last_name}
@@ -79,7 +81,7 @@ export function RemoveMember({
                     </button>
                   </li>
                 )}
-              </>
+              </div>
             ))
           ) : (
             <li className=" mr-5 text-2xl"> Search to chat </li>

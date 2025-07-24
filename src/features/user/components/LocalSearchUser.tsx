@@ -47,7 +47,7 @@ export function LocalSearchUser({ users }: LocalSearchUserProps) {
           >
             <img
               src={user.profile_photo}
-              className="user-profile-image w-8 h-8 rounded-full cursor-pointer"
+              className="user-profile-image w-8 h-8 rounded-full cursor-pointer ring-2 ring-red-200"
               onClick={() => {
                 setModal(true);
                 setUserId(user.user_id);

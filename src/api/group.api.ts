@@ -33,6 +33,10 @@ export const removeUser = (formData: FormData) => {
   });
 };
 
-export const userLeftGroup = (group_id:number)=>{
-  return api.get(`/member/leftGroup/${group_id}`)
-}
+export const userLeftGroup = (group_id: number) => {
+  return api.get(`/member/leftGroup/${group_id}`);
+};
+
+export const getGroupData = (group_id: number) => {
+  return api.get(`/group/getGroupDetail/${group_id}`);
+};

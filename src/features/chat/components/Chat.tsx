@@ -8,7 +8,7 @@ import { useLoggedInUserContext } from "../../user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { ShowChatData } from "./index";
 
-export function Chat({ users, setUsers }: chatProps) {
+export function Chat({  setUsers }: chatProps) {
   const { selectedUser, setSelectedUser } = useSelectedUserContext();
   const { loggedInUser } = useLoggedInUserContext();
   const [loading, setLoading] = useState<boolean>(false);
@@ -61,7 +61,7 @@ export function Chat({ users, setUsers }: chatProps) {
         <div className="flex mt-1">
           <img
             src={selectedUser?.profile_photo}
-            className="user-profile-image w-[60px] h-[60px] rounded-full border border-gray-400"
+            className="user-profile-image w-[60px] h-[60px] rounded-full ring-2 ring-red-200"
             key={selectedUser?.user_id}
           />
           {loggedInUser?.user_id === selectedUser?.user_id ? (

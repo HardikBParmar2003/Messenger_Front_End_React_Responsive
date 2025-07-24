@@ -35,7 +35,7 @@ export function AllGroups({ groups }: AllGroupsProps) {
           >
             <img
               src={group.profile_photo}
-              className="user-profile-image w-8 h-8 rounded-full cursor-pointer"
+              className="user-profile-image w-8 h-8 rounded-full cursor-pointer ring-2 ring-red-200"
             />
             <span className="user-name">{group.group_name}</span>
           </li>

@@ -2,6 +2,7 @@ import { addMember, findUser, individualUser } from "@/api/handler";
 import { useSelectedGroupContext } from "../hook";
 import type { User } from "@/interface/interface";
 import { useState } from "react";
+import { socket } from ".";
 type AddMemberProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -33,6 +34,8 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
     const response = await addMember(formData);
     const newMember = await individualUser(response.data.data.user_id);
     addUSer(newMember.data.data);
+    socket.emit("add member to group", user_id, group_id);
+
   };
 
   if (!isOpen) return null;
@@ -71,7 +74,7 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
               <li key={user.user_id} className="user-list w-[100%] flex p-3">
                 <img
                   src={user.profile_photo}
-                  className="user-profile-image cursor-pointer w-8 h-8 rounded-full"
+                  className="user-profile-image cursor-pointer w-8 h-8 rounded-full ring-2 ring-red-200"
                 />
                 <span className="user-name w-[290px] ">
                   {user.first_name + " " + user.last_name}

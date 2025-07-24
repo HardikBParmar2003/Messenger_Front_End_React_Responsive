@@ -1,8 +1,9 @@
 import { updateGroup } from "@/api/group.api";
 import { useState, useEffect } from "react";
 import { useSelectedGroupContext } from "../hook";
-import type { EditGroupProps } from "@/interface/interface";
+import type { EditGroupProps, Group } from "@/interface/interface";
 import { toast } from "react-toastify";
+import { socket } from "./ShowGroupChat";
 
 export function EditGroupModal({
   isOpen,
@@ -43,9 +44,11 @@ export function EditGroupModal({
         Number(selectedGroup?.group_id),
         formData
       );
-      setSelectedGroup(response.data.data);
-      onGroupUpdated(response.data.data);
+      const groupData: Group = response.data.data;
+      setSelectedGroup(groupData);
+      onGroupUpdated(groupData);
       onClose();
+      // socket.emit("update group", groupData.group_id, groupData);
       toast.success(response.data.message);
     } catch (err) {
       setLoading(false);
@@ -89,7 +92,7 @@ export function EditGroupModal({
           <img
             src={preview}
             alt="Preview"
-            className="w-20 h-20 object-cover rounded-full mb-4"
+            className="w-20 h-20 object-cover rounded-full mb-4 ring-2 ring-red-200"
           />
         )}
 

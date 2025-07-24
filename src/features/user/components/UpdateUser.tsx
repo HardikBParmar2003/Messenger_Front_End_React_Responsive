@@ -19,8 +19,8 @@ export function UpdateUser() {
     if (file) {
       if (
         file.type.includes("jpeg") ||
-        file.type.includes("jpeg") ||
-        file.type.includes("jpeg")
+        file.type.includes("png") ||
+        file.type.includes("jpg")
       ) {
         const imageUrl = URL.createObjectURL(file);
         setProfile(imageUrl);
@@ -54,10 +54,11 @@ export function UpdateUser() {
   return (
     <div className="bg--200 flex justify-center items-center min-h-screen">
       <form onSubmit={handleSubmit(updateUserData)} className="text-left">
+      <h6 className="text-3xl font-bold mb-3">Update User </h6>
+
         <div className="">
-          <img src={profile} className="w-[180px] h-[150px] rounded-full" />
+          <img src={profile} className="w-[140px] h-[140px] rounded-full ring-2 ring-red-100" />
         </div>
-        <h6 className="text-3xl font-bold mb-3">Update User </h6>
         <div className="m-2 ">
           <label>First Name: </label>
           <input

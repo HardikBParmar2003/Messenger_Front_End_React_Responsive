@@ -43,7 +43,7 @@ export function ViewGroupMember({
         <ul className="w-[90%]  m-2 p-5 overflow-y-auto h-[70%]">
           {filteredUsers.length > 0 ? (
             filteredUsers.map((user: User) => (
-              <>
+              <div key={user.user_id}>
                 {user.user_id !== loggedInUser?.user_id && (
                   <li
                     key={user.user_id}
@@ -51,14 +51,14 @@ export function ViewGroupMember({
                   >
                     <img
                       src={user.profile_photo}
-                      className="user-profile-image cursor-pointer w-8 h-8 rounded-full"
+                      className="user-profile-image cursor-pointer w-8 h-8 rounded-full ring-2 ring-red-200"
                     />
                     <span className="user-name w-[290px] ">
                       {user.first_name + " " + user.last_name}
                     </span>
                   </li>
                 )}
-              </>
+              </div>
             ))
           ) : (
             <li className=" mr-5 text-2xl"> No user found </li>

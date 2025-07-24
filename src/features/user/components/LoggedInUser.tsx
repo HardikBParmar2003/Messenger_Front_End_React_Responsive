@@ -8,7 +8,7 @@ export function LoggedInUserComponent() {
     <div className="flex ">
       <img
         src={loggedInUser?.profile_photo}
-        className="user-profile-image w-15 h-15 rounded-full cursor-pointer"
+        className="user-profile-image w-15 h-15 rounded-full cursor-pointer ring-2 ring-red-100"
         key={loggedInUser?.user_id}
         onClick={() => navigate("/home/updateUser")}
       />

@@ -67,7 +67,7 @@ export const GlobalSearchUser: FC = () => {
               <img
                 src={user.profile_photo}
                 alt={`${user.first_name} ${user.last_name}`}
-                className="w-8 h-8 rounded-full"
+                className="w-8 h-8 rounded-full ring-2 ring-red-200"
               />
               <span className="ml-3 truncate w-[190px]">
                 {user.first_name} {user.last_name}

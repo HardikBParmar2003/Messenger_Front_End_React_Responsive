@@ -62,7 +62,7 @@ export function UserProfile({  onClose, userId }: userProfileTypes) {
           <div className="flex justify-center mb-3 border-b-1">
             <img
               src={user?.profile_photo}
-              className="rounded-full w-[50%] h-[150px] mb-1"
+              className="rounded-full w-[50%] h-[150px] mb-1 ring-2 ring-red-100"
             />
           </div>
           <div className="text-">

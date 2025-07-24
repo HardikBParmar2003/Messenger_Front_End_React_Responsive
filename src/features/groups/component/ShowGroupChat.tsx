@@ -11,7 +11,7 @@ import { useLoggedInUserContext } from "@/features/user/hooks";
 import { useSelectedGroupContext } from "../hook";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:4000", {
+export const socket = io("http://localhost:4000", {
   withCredentials: true,
 });
 
@@ -167,7 +167,7 @@ export function ShowGroupChat({
                       <div className="flex mb-2">
                         <img
                           src={msg.sender.profile_photo}
-                          className="w-5 h-5 rounded-full hover:cursor-pointer"
+                          className="w-5 h-5 rounded-full hover:cursor-pointer ring-2 ring-red-200"
                         />
                         <span className="text-sm ml-1">
                           {msg.sender.first_name} {msg.sender.last_name}

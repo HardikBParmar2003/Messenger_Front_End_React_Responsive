@@ -19,10 +19,12 @@ export function NavBar() {
         </h6>
       </div>
 
-      <div   className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded mr-10 min-w-[10%]">
-        <button onClick={LogOut}>LogOut</button>
-      </div>
+      <button
+        className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded mr-10 min-w-[10%]"
+        onClick={LogOut}
+      >
+        LogOut
+      </button>
     </div>
   );
 }
-

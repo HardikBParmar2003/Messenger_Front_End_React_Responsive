@@ -47,7 +47,8 @@ export function GroupChat({
 
   useEffect(() => {
     if (!selectedGroup) {
-      return;
+      if (allGroups.length > 0) setSelectedGroup(allGroups[0]);
+      else return;
     }
     const group_id: number = Number(selectedGroup?.group_id);
     async function FetchUserChatData() {
@@ -73,7 +74,7 @@ export function GroupChat({
       }
     }
     FetchUserChatData();
-  }, [selectedGroup]);
+  }, [selectedGroup, allGroups]);
 
   const removeMember = (user_id: number) => {
     setGroupUsers((prevUser) =>
@@ -108,7 +109,7 @@ export function GroupChat({
       await userLeftGroup(group_id);
       setSelectedGroup(null);
       onDeleteGroup(group_id);
-      toast.success("User left fro the group successfuly");
+      toast.success("User left from the group successfuly");
     } else {
       return;
     }
@@ -141,7 +142,7 @@ export function GroupChat({
           <>
             <img
               src={selectedGroup?.profile_photo}
-              className="user-profile-image w-[60px] h-[60px] rounded-full border border-gray-400"
+              className="user-profile-image w-[60px] h-[60px] rounded-full ring-2 ring-red-200"
               key={selectedGroup?.group_id}
             />
             {loggedInUser?.user_id === selectedGroup.user_id ? (
@@ -313,7 +314,7 @@ export function GroupChat({
           groupUsers={groupUser}
         />
       )}
-      {loading ? (
+      {loading && (
         <span>
           {" "}
           <svg
@@ -335,8 +336,6 @@ export function GroupChat({
           </svg>
           Loading...
         </span>
-      ) : (
-        <></>
       )}
     </>
   );
