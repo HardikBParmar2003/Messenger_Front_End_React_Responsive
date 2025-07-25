@@ -2,12 +2,10 @@ import React, {
   createContext,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import { useLoggedInUserContext } from "@/features/user/hooks";
 import { io, Socket } from "socket.io-client";
-import { spec } from "node:test/reporters";
 
 interface socketType {
   socket: Socket | null;

@@ -5,14 +5,16 @@ import { Chat } from "../../chat/components/index";
 import { chattingUsers } from "@/api/handler";
 import { NavBar } from "./NavBar";
 import type { User } from "@/interface/interface";
-
+import { useNotifictionContext } from "@/features/auth/hooks/NotificationFunction";
 export const AllUser: FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+  // const {askPermission} = useNotifictionContext()
+  // console.log(askPermission);
 
   useEffect(() => {
+
     async function fetchUsers() {
       try {
         const response = await chattingUsers();
@@ -27,6 +29,7 @@ export const AllUser: FC = () => {
         setLoading(false);
       }
     }
+    // await ask
     fetchUsers();
   }, []);
 

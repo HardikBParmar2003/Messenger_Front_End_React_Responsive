@@ -2,7 +2,7 @@ import { addMember, findUser, individualUser } from "@/api/handler";
 import { useSelectedGroupContext } from "../hook";
 import type { User } from "@/interface/interface";
 import { useState } from "react";
-import { useSocketContext } from "@/features/auth/component/SocketContext";
+import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 type AddMemberProps = {
   isOpen: boolean;
   onClose: () => void;

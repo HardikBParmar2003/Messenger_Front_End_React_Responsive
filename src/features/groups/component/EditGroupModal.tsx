@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useSelectedGroupContext } from "../hook";
 import type { EditGroupProps, Group } from "@/interface/interface";
 import { toast } from "react-toastify";
-import { useSocketContext } from "@/features/auth/component/SocketContext";
+import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 export function EditGroupModal({
   isOpen,
   onClose,

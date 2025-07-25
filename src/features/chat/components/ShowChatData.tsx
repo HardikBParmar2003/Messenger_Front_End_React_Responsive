@@ -13,7 +13,7 @@ import { useLoggedInUserContext } from "@/features/user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import type { User } from "@/interface/interface";
 import { chattingUsers } from "@/api/chat.api";
-import { useSocketContext } from "@/features/auth/component/SocketContext";
+import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 
 interface Chat {
   sender_id: number;

@@ -6,13 +6,11 @@ import { AllGroups } from "./AllGroups";
 import { SelectedGroupContextProvider } from "../hook";
 import { GroupChat } from "./GroupChat";
 import CreateGroupModal from "./CreateGroupModal";
-import { useSocketContext } from "@/features/auth/component/SocketContext";
+import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 export function GroupHome() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [isModal, setIsModal] = useState<boolean>(false);
   const { socket } = useSocketContext();
-
-  if (!socket) return;
 
   async function fetchOneGroupData(group_id: number) {
     const response = await getGroupData(group_id);
@@ -36,11 +34,12 @@ export function GroupHome() {
   }, []);
 
   useEffect(() => {
+    if (!socket) return;
     if (allGroups.length > 0) {
       const groupIds = allGroups.map((g) => g.group_id);
       socket.emit("joinGroups", groupIds);
     }
-  }, [allGroups]);
+  }, [allGroups, socket]);
 
   const closeModal = () => {
     setIsModal(false);
@@ -55,31 +54,34 @@ export function GroupHome() {
   };
 
   useEffect(() => {
+    if (!socket) return;
     socket.on("add member to group back", (group_id) => {
       fetchOneGroupData(group_id);
     });
     return () => {
       socket.off("add member to group back");
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
+    if (!socket) return;
     socket.on("remove member back", (group_id: number) => {
       onDeleteGroup(group_id);
     });
     return () => {
       socket.off("remove member back");
     };
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
+    if (!socket) return;
     socket.on("update group back", (group) => {
       updatedGroups(group);
     });
     return () => {
       socket.off("update group back");
     };
-  }, []);
+  }, [socket]);
 
   const updatedGroups = (newGroup: Group) => {
     setAllGroups((prev) =>

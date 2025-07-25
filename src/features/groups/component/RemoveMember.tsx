@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { useLoggedInUserContext } from "@/features/user/hooks";
 import { useSelectedGroupContext } from "../hook";
 import { removeUser } from "@/api/handler";
-import { useSocketContext } from "@/features/auth/component/SocketContext";
+import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 export function RemoveMember({
   isOpen,
   onClose,
