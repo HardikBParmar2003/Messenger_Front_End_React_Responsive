@@ -9,11 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLoggedInUserContext } from "@/features/user/hooks";
 import { useSelectedGroupContext } from "../hook";
-import { io } from "socket.io-client";
-
-export const socket = io("http://localhost:4000", {
-  withCredentials: true,
-});
+import { useSocketContext } from "@/features/auth/component/SocketContext";
 
 export function ShowGroupChat({
   ChatData,
@@ -28,7 +24,11 @@ export function ShowGroupChat({
   const [input, setInput] = useState("");
   const [tagUser, setTagUser] = useState<User[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
+  const { socket } = useSocketContext();
 
+  if (!socket) {
+    return;
+  }
   const groupChatByDate = useMemo(() => {
     const grouped: Record<string, GroupChat[]> = {};
     const sortedMessages = [...allMessages].sort(
@@ -50,7 +50,7 @@ export function ShowGroupChat({
   }, [allMessages]);
 
   function sendMessage() {
-    if (!inputMessageRef.current?.value.trim()) {
+    if (!inputMessageRef.current?.value.trim() || !socket) {
     } else {
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);

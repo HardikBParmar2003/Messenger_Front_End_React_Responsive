@@ -3,12 +3,10 @@ import { useState, useEffect } from "react";
 import { useSelectedGroupContext } from "../hook";
 import type { EditGroupProps, Group } from "@/interface/interface";
 import { toast } from "react-toastify";
-import { socket } from "./ShowGroupChat";
-
+import { useSocketContext } from "@/features/auth/component/SocketContext";
 export function EditGroupModal({
   isOpen,
   onClose,
-  onGroupUpdated,
 }: EditGroupProps) {
   const { selectedGroup, setSelectedGroup } = useSelectedGroupContext();
   const [loading, setLoading] = useState(false);
@@ -19,6 +17,7 @@ export function EditGroupModal({
   const [preview, setPreview] = useState<string | undefined>(
     selectedGroup?.profile_photo
   );
+  const{socket} = useSocketContext()
   useEffect(() => {
     setGroupName(selectedGroup?.group_name as string);
     setPreview(selectedGroup?.profile_photo);
@@ -46,9 +45,8 @@ export function EditGroupModal({
       );
       const groupData: Group = response.data.data;
       setSelectedGroup(groupData);
-      onGroupUpdated(groupData);
       onClose();
-      // socket.emit("update group", groupData.group_id, groupData);
+      socket!.emit("update group", groupData.group_id, groupData);
       toast.success(response.data.message);
     } catch (err) {
       setLoading(false);

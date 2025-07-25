@@ -9,11 +9,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
-import { io } from "socket.io-client";
 import { useLoggedInUserContext } from "@/features/user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import type { User } from "@/interface/interface";
 import { chattingUsers } from "@/api/chat.api";
+import { useSocketContext } from "@/features/auth/component/SocketContext";
 
 interface Chat {
   sender_id: number;
@@ -24,13 +24,8 @@ interface Chat {
 
 interface ChatDataTypeProps {
   ChatData: Chat[] | null;
-  // users: User[];
   setUsers: Dispatch<SetStateAction<User[]>>;
 }
-
-const socket = io("http://localhost:4000", {
-  withCredentials: true,
-});
 
 export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   const { loggedInUser } = useLoggedInUserContext();
@@ -38,6 +33,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   const inputMessageRef = useRef<HTMLInputElement>(null);
   const [allMessages, setAllMessages] = useState<Chat[]>(ChatData || []);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
+  const { socket } = useSocketContext();
 
   const groupChatByDate = useMemo(() => {
     const grouped: Record<string, Chat[]> = {};
@@ -56,7 +52,8 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   }, [allMessages]);
 
   function sendMessage() {
-    if (!inputMessageRef.current?.value.trim()) {
+    if (!inputMessageRef.current?.value.trim() || !socket) {
+      return;
     } else {
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
@@ -67,6 +64,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   }
 
   useEffect(() => {
+    if (!socket) return;
     socket.on("send message back", async (data: Chat) => {
       if (
         (data.sender_id === selectedUser?.user_id &&
@@ -96,7 +94,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
     return () => {
       socket.off("send message back");
     };
-  }, [allMessages]);
+  }, [socket, selectedUser, loggedInUser]);
 
   useEffect(() => {
     if (ChatData) {

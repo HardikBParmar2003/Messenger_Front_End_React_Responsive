@@ -1,11 +1,15 @@
 import type { Group, SelectedGroupContextType } from "@/interface/interface";
-import { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const SelectedGroupContext = createContext<
   SelectedGroupContextType | undefined
 >(undefined);
 
-export function SelectedGroupContextProvider({ children }: any) {
+export function SelectedGroupContextProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [selectedGroup, setSelectedGroup] = useState<Group | null>(null);
 
   return (

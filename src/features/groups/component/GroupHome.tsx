@@ -6,11 +6,13 @@ import { AllGroups } from "./AllGroups";
 import { SelectedGroupContextProvider } from "../hook";
 import { GroupChat } from "./GroupChat";
 import CreateGroupModal from "./CreateGroupModal";
-import { socket } from "./ShowGroupChat";
-
+import { useSocketContext } from "@/features/auth/component/SocketContext";
 export function GroupHome() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [isModal, setIsModal] = useState<boolean>(false);
+  const { socket } = useSocketContext();
+
+  if (!socket) return;
 
   async function fetchOneGroupData(group_id: number) {
     const response = await getGroupData(group_id);
@@ -70,11 +72,14 @@ export function GroupHome() {
     };
   }, []);
 
-  // useEffect(() => {
-  //   socket.on("update group back", (group) => {
-  //     updatedGroups(group);
-  //   });
-  // }, []);
+  useEffect(() => {
+    socket.on("update group back", (group) => {
+      updatedGroups(group);
+    });
+    return () => {
+      socket.off("update group back");
+    };
+  }, []);
 
   const updatedGroups = (newGroup: Group) => {
     setAllGroups((prev) =>

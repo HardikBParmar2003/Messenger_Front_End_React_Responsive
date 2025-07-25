@@ -2,7 +2,7 @@ import { addMember, findUser, individualUser } from "@/api/handler";
 import { useSelectedGroupContext } from "../hook";
 import type { User } from "@/interface/interface";
 import { useState } from "react";
-import { socket } from ".";
+import { useSocketContext } from "@/features/auth/component/SocketContext";
 type AddMemberProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -13,6 +13,7 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
   const [value, setvalue] = useState("");
   const [searchUsers, setSearchUsers] = useState<User[]>([]);
   const { selectedGroup } = useSelectedGroupContext();
+  const {socket}= useSocketContext()
   const searchUser = async () => {
     const params = new URLSearchParams({
       value: value || "",
@@ -34,8 +35,7 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
     const response = await addMember(formData);
     const newMember = await individualUser(response.data.data.user_id);
     addUSer(newMember.data.data);
-    socket.emit("add member to group", user_id, group_id);
-
+    socket!.emit("add member to group", user_id, group_id);
   };
 
   if (!isOpen) return null;

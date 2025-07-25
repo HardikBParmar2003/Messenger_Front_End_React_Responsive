@@ -10,6 +10,7 @@ export const AllUser: FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  
 
   useEffect(() => {
     async function fetchUsers() {

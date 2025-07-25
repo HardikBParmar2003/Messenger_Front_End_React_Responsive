@@ -3,8 +3,7 @@ import { useMemo, useState } from "react";
 import { useLoggedInUserContext } from "@/features/user/hooks";
 import { useSelectedGroupContext } from "../hook";
 import { removeUser } from "@/api/handler";
-import { socket } from "./ShowGroupChat";
-
+import { useSocketContext } from "@/features/auth/component/SocketContext";
 export function RemoveMember({
   isOpen,
   onClose,
@@ -14,6 +13,7 @@ export function RemoveMember({
   const [value, setValue] = useState("");
   const { selectedGroup } = useSelectedGroupContext();
   const { loggedInUser } = useLoggedInUserContext();
+  const {socket} = useSocketContext()
 
   const filteredUsers = useMemo(() => {
     return groupUsers.filter((user) =>
@@ -30,7 +30,7 @@ export function RemoveMember({
     formData.append("member_id", user_id);
     formData.append("group_id", group_id);
     await removeUser(formData);
-    socket.emit("remove member",user_id,group_id)
+    socket!.emit("remove member",user_id,group_id)
     removeMember(user.user_id as number);
   };
 

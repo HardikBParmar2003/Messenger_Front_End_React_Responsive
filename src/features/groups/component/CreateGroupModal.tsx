@@ -2,7 +2,6 @@ import { createGroup } from "@/api/group.api";
 import type { CloseModelProps } from "@/interface/interface";
 import { useState } from "react";
 import { toast } from "react-toastify";
-import { socket } from "./ShowGroupChat";
 
 function CreateGroupModal({ closeModal, addNewGroup }: CloseModelProps) {
   const [groupName, setGroupName] = useState("");
