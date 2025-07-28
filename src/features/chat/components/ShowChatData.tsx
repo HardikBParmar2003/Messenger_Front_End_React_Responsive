@@ -72,7 +72,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
     socket.on("send message back", async (data: Chat,sender:string) => {
       sendNotification(`New message from ${sender}!!!`,{
         body: `${data.message}`,
-        icon:"public/images.jpeg"
+        icon:"/images.jpeg"
       })
       if (
         (data.sender_id === selectedUser?.user_id &&

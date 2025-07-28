@@ -1,6 +1,7 @@
 import { sendOtp } from "@/api/handler";
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 
 export function Email() {
@@ -69,7 +70,15 @@ export function Email() {
             Loading...
           </button>
         ) : (
+          <>
           <button type="submit">Send Otp</button>
+          <Link
+          to="/auth/login"
+          className="m-5 bg-blue-100 min-w-50 p-2 rounded-md text-center"
+        >
+          Log In
+        </Link>
+          </>
         )}
       </form>
     </div>

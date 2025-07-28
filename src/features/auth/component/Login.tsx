@@ -6,12 +6,16 @@ import { useLoggedInUserContext } from "@/features/user/hooks";
 import { logInUser } from "@/api/auth.api";
 import { getCookie } from "../function";
 import { toast } from "react-toastify";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye, faEyeSlash, faL } from "@fortawesome/free-solid-svg-icons";
+import { ShowPasswordButton } from "@/components/Button/ShowPasswordButton";
 
 export function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { setLoggedInUser } = useLoggedInUserContext();
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const token = getCookie("jwt_token");
@@ -30,7 +34,7 @@ export function Login() {
       const response = await logInUser(formData);
       setLoggedInUser(await response.data.data.userData);
       navigate("/home");
-      toast.success("User log in successful")
+      toast.success("User log in successful");
     } catch (error) {
       throw error;
     }
@@ -53,15 +57,23 @@ export function Login() {
           />
         </div>
         <div>
-          <label htmlFor="password">Password:</label>
+          <label htmlFor="password" className="ml-9">
+            Password:
+          </label>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             id="password"
             value={password}
             onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
               setPassword(e.target.value)
             }
+            className="w-[70%] ml-10"
             required
+          />
+
+          <ShowPasswordButton
+            showPassword={showPassword}
+            onToggle={() => setShowPassword(!showPassword)}
           />
         </div>
         <button type="submit">Log In</button>
