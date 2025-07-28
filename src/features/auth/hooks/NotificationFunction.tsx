@@ -22,6 +22,7 @@ export function NotificationContextProvider({
   );
 
   const askPermission = async () => {
+    console.log("default permissionis:",Notification.permission);
     if (Notification.permission === "default") {
       const perm = await Notification.requestPermission();
       setPermission(perm);
@@ -46,13 +47,9 @@ export function NotificationContextProvider({
   );
 }
 
-export const useNotifictionContext = () => {
-  const context = useContext(NotificationCntext);
-  if (!context) return;
-  return context;
-};
+export const useNotifictionContext = () => useContext(NotificationCntext);
 
-// NotificationContext.tsx
+
 // import React, { createContext, useContext, useState } from "react";
 
 // type NotificationContextType = {
@@ -67,7 +64,7 @@ export const useNotifictionContext = () => {
 //   sendNotification: () => {},
 // });
 
-// export const NotificationProvider = ({ children }: { children: React.ReactNode }) => {
+// export const NotificationContextProvider = ({ children }: { children: React.ReactNode }) => {
 //   const [permission, setPermission] = useState<NotificationPermission>(
 //     Notification.permission
 //   );
@@ -94,4 +91,4 @@ export const useNotifictionContext = () => {
 //   );
 // };
 
-// export const useNotification = () => useContext(NotificationContext);
+// export const useNotifictionContext = () => useContext(NotificationContext);

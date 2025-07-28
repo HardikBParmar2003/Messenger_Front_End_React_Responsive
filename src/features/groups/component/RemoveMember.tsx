@@ -30,7 +30,7 @@ export function RemoveMember({
     formData.append("member_id", user_id);
     formData.append("group_id", group_id);
     await removeUser(formData);
-    socket!.emit("remove member",user_id,group_id)
+    socket!.emit("remove member",user_id,group_id,selectedGroup?.group_name)
     removeMember(user.user_id as number);
   };
 

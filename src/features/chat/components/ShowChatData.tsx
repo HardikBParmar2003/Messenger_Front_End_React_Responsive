@@ -11,9 +11,11 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 import { useLoggedInUserContext } from "@/features/user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
+import { useNotifictionContext } from "@/features/auth/hooks/NotificationFunction";
 import type { User } from "@/interface/interface";
 import { chattingUsers } from "@/api/chat.api";
 import { useSocketContext } from "@/features/auth/hooks/SocketContext";
+import { send } from "process";
 
 interface Chat {
   sender_id: number;
@@ -30,6 +32,7 @@ interface ChatDataTypeProps {
 export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   const { loggedInUser } = useLoggedInUserContext();
   const { selectedUser } = useSelectedUserContext();
+  const{sendNotification} = useNotifictionContext();
   const inputMessageRef = useRef<HTMLInputElement>(null);
   const [allMessages, setAllMessages] = useState<Chat[]>(ChatData || []);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
@@ -58,14 +61,19 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
       const receiver_id: number = Number(selectedUser?.user_id);
-      socket.emit("send message", sender_id, receiver_id, message);
+      const sender_name = loggedInUser?.first_name as string +" "+ loggedInUser?.last_name as string
+      socket.emit("send message", sender_id, receiver_id, message,sender_name);
       inputMessageRef.current.value = "";
     }
   }
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("send message back", async (data: Chat) => {
+    socket.on("send message back", async (data: Chat,sender:string) => {
+      sendNotification(`New message from ${sender}!!!`,{
+        body: `${data.message}`,
+        icon:"public/images.jpeg"
+      })
       if (
         (data.sender_id === selectedUser?.user_id &&
           data.receiver_id === loggedInUser?.user_id) ||

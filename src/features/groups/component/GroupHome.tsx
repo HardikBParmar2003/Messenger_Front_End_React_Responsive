@@ -7,18 +7,23 @@ import { SelectedGroupContextProvider } from "../hook";
 import { GroupChat } from "./GroupChat";
 import CreateGroupModal from "./CreateGroupModal";
 import { useSocketContext } from "@/features/auth/hooks/SocketContext";
+import { useNotifictionContext } from "@/features/auth/hooks/NotificationFunction";
+import { useLoggedInUserContext } from "@/features/user/hooks";
 export function GroupHome() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [isModal, setIsModal] = useState<boolean>(false);
   const { socket } = useSocketContext();
+  const {loggedInUser} = useLoggedInUserContext()
+  const {sendNotification} = useNotifictionContext()
 
-  async function fetchOneGroupData(group_id: number) {
+  async function fetchOneGroupData(group_id: number,admin_name:string) {
     const response = await getGroupData(group_id);
     const groupData: Group = response.data.data;
     if (!groupData.latestMessageTime) {
       groupData.latestMessageTime = String(Date.now());
     }
     addNewGroup(groupData);
+    sendNotification(`You are added into ${groupData.group_name} group, by ${admin_name}`)
   }
 
   useEffect(() => {
@@ -55,8 +60,8 @@ export function GroupHome() {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("add member to group back", (group_id) => {
-      fetchOneGroupData(group_id);
+    socket.on("add member to group back", (group_id,admin_name) => {
+      fetchOneGroupData(group_id,admin_name);
     });
     return () => {
       socket.off("add member to group back");
@@ -65,7 +70,12 @@ export function GroupHome() {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("remove member back", (group_id: number) => {
+    socket.on("remove member back", (group_id: number,user_id:number,group_name:string) => {
+      if(user_id == loggedInUser?.user_id){
+        sendNotification("Remove From Group",{
+          body:`You removed from ${group_name}`
+        })
+      }
       onDeleteGroup(group_id);
     });
     return () => {
@@ -76,6 +86,7 @@ export function GroupHome() {
   useEffect(() => {
     if (!socket) return;
     socket.on("update group back", (group) => {
+      sendNotification(`Update group name: ${group.group_name}`)
       updatedGroups(group);
     });
     return () => {

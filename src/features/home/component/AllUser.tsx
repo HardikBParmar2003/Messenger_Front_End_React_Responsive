@@ -10,11 +10,9 @@ export const AllUser: FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  // const {askPermission} = useNotifictionContext()
-  // console.log(askPermission);
-
+  const { askPermission } = useNotifictionContext();
+  
   useEffect(() => {
-
     async function fetchUsers() {
       try {
         const response = await chattingUsers();
@@ -27,6 +25,7 @@ export const AllUser: FC = () => {
         setError(err.message);
       } finally {
         setLoading(false);
+        askPermission()
       }
     }
     // await ask

@@ -8,6 +8,7 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLoggedInUserContext } from "@/features/user/hooks";
+import { useNotifictionContext } from "@/features/auth/hooks/NotificationFunction";
 import { useSelectedGroupContext } from "../hook";
 import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 
@@ -25,6 +26,7 @@ export function ShowGroupChat({
   const [tagUser, setTagUser] = useState<User[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const { socket } = useSocketContext();
+  const {sendNotification} = useNotifictionContext()
 
   if (!socket) {
     return;
@@ -55,7 +57,8 @@ export function ShowGroupChat({
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
       const group_id: number = Number(selectedGroup?.group_id);
-      socket.emit("send group message", sender_id, group_id, message);
+      const sender_name = String(loggedInUser?.first_name+ " "+loggedInUser?.last_name)
+      socket.emit("send group message", sender_id, group_id, message,sender_name,selectedGroup?.group_name);
       inputMessageRef.current.value = "";
       setInput("");
     }
@@ -71,7 +74,10 @@ export function ShowGroupChat({
 
   useEffect(() => {
     if (!selectedGroup) return;
-    socket.on("send group message back", (data) => {
+    socket.on("send group message back", (data,name:string,group_name:string) => {
+      sendNotification(`New message from ${group_name} group by ${name}`,{
+        body:`${data.message}`
+      })
       if (selectedGroup?.group_id == data.group_id) {
         setAllMessages((prev) => [...prev, data]);
       }
