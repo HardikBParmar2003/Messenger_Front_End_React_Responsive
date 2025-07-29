@@ -129,7 +129,6 @@ export function GroupHome() {
             isModal ? "blur-xs pointer-events-none" : ""
           }`}
         >
-          {" "}
           <div className="w-[25%]  h-[80%] border- border-gray-400 bg-anmber-400">
             <AllGroups groups={allGroups} />
           </div>

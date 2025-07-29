@@ -48,9 +48,13 @@ export function GroupChat({
 
   useEffect(() => {
     if (!selectedGroup) {
+      console.log("no selected group", allGroups);
       if (allGroups.length > 0) setSelectedGroup(allGroups[0]);
-      return;
+      else return;
     }
+  }, [allGroups]);
+
+  useEffect(() => {
     const group_id: number = Number(selectedGroup?.group_id);
     async function FetchUserChatData() {
       try {
@@ -213,8 +217,7 @@ export function GroupChat({
                   </button>
                   {loading ? (
                     <span>
-                             <LoaderComponent />
-
+                      <LoaderComponent />
                     </span>
                   ) : (
                     <button onClick={downloadChat}>
@@ -286,7 +289,6 @@ export function GroupChat({
         <span>
           {" "}
           <LoaderComponent />
-
           Loading...
         </span>
       )}

@@ -33,12 +33,6 @@ export const AllUser: FC = () => {
     fetchUsers();
   }, []);
 
-  if (loading)
-    return (
-      <p>
-        Loading users... <LoaderComponent />
-      </p>
-    );
   if (error) return <p>Error: {error}</p>;
 
   return (
