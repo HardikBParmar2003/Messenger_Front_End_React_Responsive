@@ -8,7 +8,7 @@ import { useLoggedInUserContext } from "../../user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { ShowChatData } from "./index";
 
-export function Chat({  setUsers }: chatProps) {
+export function Chat({ users, setUsers }: chatProps) {
   const { selectedUser, setSelectedUser } = useSelectedUserContext();
   const { loggedInUser } = useLoggedInUserContext();
   const [loading, setLoading] = useState<boolean>(false);
@@ -106,7 +106,7 @@ export function Chat({  setUsers }: chatProps) {
           )}
         </div>
       </div>
-      <ShowChatData ChatData={chatData} setUsers={setUsers} />
+      <ShowChatData ChatData={chatData} setUsers={setUsers} users={users}/>
     </>
   );
 }

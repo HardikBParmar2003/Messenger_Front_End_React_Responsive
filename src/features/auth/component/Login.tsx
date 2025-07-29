@@ -6,8 +6,6 @@ import { useLoggedInUserContext } from "@/features/user/hooks";
 import { logInUser } from "@/api/auth.api";
 import { getCookie } from "../function";
 import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash, faL } from "@fortawesome/free-solid-svg-icons";
 import { ShowPasswordButton } from "@/components/Button/ShowPasswordButton";
 
 export function Login() {
@@ -28,8 +26,8 @@ export function Login() {
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     const formData = new FormData();
-    formData.append("email", email);
-    formData.append("password", password);
+    formData.append("email", email.trim());
+    formData.append("password", password.trim());
     try {
       const response = await logInUser(formData);
       setLoggedInUser(await response.data.data.userData);

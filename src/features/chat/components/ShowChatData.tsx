@@ -1,38 +1,18 @@
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type Dispatch,
-  type SetStateAction,
-} from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 
 import { useLoggedInUserContext } from "@/features/user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { useNotifictionContext } from "@/features/auth/hooks/NotificationFunction";
-import type { User } from "@/interface/interface";
+import type { Chat, ChatDataTypeProps, User } from "@/interface/interface";
 import { chattingUsers } from "@/api/chat.api";
 import { useSocketContext } from "@/features/auth/hooks/SocketContext";
-import { send } from "process";
 
-interface Chat {
-  sender_id: number;
-  receiver_id: number;
-  message: string;
-  createdAt: Date;
-}
-
-interface ChatDataTypeProps {
-  ChatData: Chat[] | null;
-  setUsers: Dispatch<SetStateAction<User[]>>;
-}
-
-export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
+export function ShowChatData({ ChatData, setUsers, users }: ChatDataTypeProps) {
   const { loggedInUser } = useLoggedInUserContext();
   const { selectedUser } = useSelectedUserContext();
-  const{sendNotification} = useNotifictionContext();
+  const { sendNotification } = useNotifictionContext();
   const inputMessageRef = useRef<HTMLInputElement>(null);
   const [allMessages, setAllMessages] = useState<Chat[]>(ChatData || []);
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
@@ -61,19 +41,23 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
       const receiver_id: number = Number(selectedUser?.user_id);
-      const sender_name = loggedInUser?.first_name as string +" "+ loggedInUser?.last_name as string
-      socket.emit("send message", sender_id, receiver_id, message,sender_name);
+      const sender_name = ((loggedInUser?.first_name as string) +
+        " " +
+        loggedInUser?.last_name) as string;
+      socket.emit("send message", sender_id, receiver_id, message, sender_name);
       inputMessageRef.current.value = "";
     }
   }
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("send message back", async (data: Chat,sender:string) => {
-      sendNotification(`New message from ${sender}!!!`,{
-        body: `${data.message}`,
-        icon:"/images.jpeg"
-      })
+    socket.on("send message back", async (data: Chat, sender: string) => {
+      if (loggedInUser?.user_id == data.receiver_id) {
+        sendNotification(`New message from ${sender}!!!`, {
+          body: `Message : ${data.message}`,
+          icon: "/images.jpeg",
+        });
+      }
       if (
         (data.sender_id === selectedUser?.user_id &&
           data.receiver_id === loggedInUser?.user_id) ||
@@ -82,21 +66,33 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
       ) {
         setAllMessages((prev) => [...prev, data]);
       }
-      try {
-        if (
-          loggedInUser?.user_id == data.sender_id ||
-          loggedInUser?.user_id == data.receiver_id
-        ) {
-          const response = await chattingUsers();
-          if (response.data.data) {
-            setUsers(response.data.data);
-          } else {
-            setUsers([]);
-          }
+
+      setUsers((prev) => {
+        let othUserId: number | null = null;
+        if (data.sender_id == loggedInUser?.user_id) {
+          othUserId = data.receiver_id;
+        } else if (data.receiver_id == loggedInUser?.user_id) {
+          othUserId = data.sender_id;
+        } else {
+          return prev;
         }
-      } catch (err) {
-        throw err;
-      }
+
+        const updatedUsers = prev.map((user) => {
+          if (user.user_id == othUserId) {
+            return {
+              ...user,
+              lastMessageAt: data.createdAt,
+            };
+          }
+          return user;
+        });
+        updatedUsers.sort(
+          (a, b) =>
+            new Date(b.lastMessageAt!).getTime() - new Date(a.lastMessageAt!).getTime()
+        );
+        return updatedUsers;
+      });
+
     });
 
     return () => {

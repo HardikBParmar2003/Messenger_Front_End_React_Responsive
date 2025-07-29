@@ -11,7 +11,7 @@ export const AllUser: FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { askPermission } = useNotifictionContext();
-  
+
   useEffect(() => {
     async function fetchUsers() {
       try {

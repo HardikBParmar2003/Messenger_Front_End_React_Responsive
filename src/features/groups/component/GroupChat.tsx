@@ -48,7 +48,7 @@ export function GroupChat({
   useEffect(() => {
     if (!selectedGroup) {
       if (allGroups.length > 0) setSelectedGroup(allGroups[0]);
-      else return;
+      return;
     }
     const group_id: number = Number(selectedGroup?.group_id);
     async function FetchUserChatData() {
@@ -74,7 +74,7 @@ export function GroupChat({
       }
     }
     FetchUserChatData();
-  }, [selectedGroup, allGroups]);
+  }, [selectedGroup]);
 
   const removeMember = (user_id: number) => {
     setGroupUsers((prevUser) =>

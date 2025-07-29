@@ -13,17 +13,25 @@ export function GroupHome() {
   const [allGroups, setAllGroups] = useState<Group[]>([]);
   const [isModal, setIsModal] = useState<boolean>(false);
   const { socket } = useSocketContext();
-  const {loggedInUser} = useLoggedInUserContext()
-  const {sendNotification} = useNotifictionContext()
+  const { loggedInUser } = useLoggedInUserContext();
+  const { sendNotification } = useNotifictionContext();
 
-  async function fetchOneGroupData(group_id: number,admin_name:string) {
+  async function fetchOneGroupData(
+    group_id: number,
+    admin_name: string,
+    user_id: number
+  ) {
     const response = await getGroupData(group_id);
     const groupData: Group = response.data.data;
     if (!groupData.latestMessageTime) {
       groupData.latestMessageTime = String(Date.now());
     }
     addNewGroup(groupData);
-    sendNotification(`You are added into ${groupData.group_name} group, by ${admin_name}`)
+    if (loggedInUser?.user_id == user_id) {
+      sendNotification(
+        `You are added into ${groupData.group_name} group, by ${admin_name}`
+      );
+    }
   }
 
   useEffect(() => {
@@ -60,8 +68,8 @@ export function GroupHome() {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("add member to group back", (group_id,admin_name) => {
-      fetchOneGroupData(group_id,admin_name);
+    socket.on("add member to group back", (group_id, admin_name, user_id) => {
+      fetchOneGroupData(group_id, admin_name, user_id);
     });
     return () => {
       socket.off("add member to group back");
@@ -70,14 +78,17 @@ export function GroupHome() {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("remove member back", (group_id: number,user_id:number,group_name:string) => {
-      if(user_id == loggedInUser?.user_id){
-        sendNotification("Remove From Group",{
-          body:`You removed from ${group_name}`
-        })
+    socket.on(
+      "remove member back",
+      (group_id: number, user_id: number, group_name: string) => {
+        if (user_id == loggedInUser?.user_id) {
+          sendNotification("Remove From Group", {
+            body: `You removed from ${group_name}`,
+          });
+        }
+        onDeleteGroup(group_id);
       }
-      onDeleteGroup(group_id);
-    });
+    );
     return () => {
       socket.off("remove member back");
     };
@@ -86,7 +97,7 @@ export function GroupHome() {
   useEffect(() => {
     if (!socket) return;
     socket.on("update group back", (group) => {
-      sendNotification(`Update group name: ${group.group_name}`)
+      sendNotification(`Update group name: ${group.group_name}`);
       updatedGroups(group);
     });
     return () => {
@@ -132,7 +143,7 @@ export function GroupHome() {
           </div>
           <div className="w-[25%]  h-[80%] border- border-gray-400 bg-anmber-400">
             <button
-              className="bg-gray-700 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded w-[70%]"
+              className="bg-gray-700 hover:bg-gray-500 text-white font-medium py-2 px-4 rounded w-[70%] cursor-pointer"
               onClick={() => setIsModal(true)}
             >
               Create Group

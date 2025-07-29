@@ -7,9 +7,10 @@ export interface User {
   profile_photo?: string;
   email?: string;
   password?: string;
+  lastMessageAt?:Date
 }
 
-export interface LocalSearchUserProps {
+export interface LocalSearchUserProps { 
   users: User[];
 }
 
@@ -19,6 +20,7 @@ export interface Chat {
   message: string;
   createdAt: Date;
 }
+
 
 export interface Group {
   group_id: number;
@@ -84,4 +86,10 @@ export interface loggedInUserType {
 export interface SelectedGroupContextType {
   selectedGroup: Group | null;
   setSelectedGroup: (group: Group | null) => void;
+}
+
+export interface ChatDataTypeProps {
+  ChatData: Chat[] | null;
+  setUsers: Dispatch<SetStateAction<User[]>>;
+  users:User[]
 }

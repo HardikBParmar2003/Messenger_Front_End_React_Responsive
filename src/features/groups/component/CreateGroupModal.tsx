@@ -53,7 +53,7 @@ function CreateGroupModal({ closeModal, addNewGroup }: CloseModelProps) {
         </div>
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200"
+          className="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-200 icursor-ponter"
         >
           Create Group
         </button>

@@ -26,7 +26,7 @@ export function ShowGroupChat({
   const [tagUser, setTagUser] = useState<User[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const { socket } = useSocketContext();
-  const {sendNotification} = useNotifictionContext()
+  const { sendNotification } = useNotifictionContext();
 
   if (!socket) {
     return;
@@ -57,8 +57,17 @@ export function ShowGroupChat({
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
       const group_id: number = Number(selectedGroup?.group_id);
-      const sender_name = String(loggedInUser?.first_name+ " "+loggedInUser?.last_name)
-      socket.emit("send group message", sender_id, group_id, message,sender_name,selectedGroup?.group_name);
+      const sender_name = String(
+        loggedInUser?.first_name + " " + loggedInUser?.last_name
+      );
+      socket.emit(
+        "send group message",
+        sender_id,
+        group_id,
+        message,
+        sender_name,
+        selectedGroup?.group_name
+      );
       inputMessageRef.current.value = "";
       setInput("");
     }
@@ -74,10 +83,18 @@ export function ShowGroupChat({
 
   useEffect(() => {
     if (!selectedGroup) return;
-    socket.on("send group message back", (data,name:string,group_name:string) => {
-      sendNotification(`New message from ${group_name} group by ${name}`,{
-        body:`${data.message}`
-      })
+    socket.on("send group message back", (data, group_name: string) => {
+      if (loggedInUser?.user_id != data.sender.user_id) {
+        sendNotification(
+          `New message from ${group_name} group by ${
+            data.sender.first_name + " " + data.sender.last_name
+          }`,
+          {
+            body: `Message : ${data.message}`,
+          }
+        );
+      }
+
       if (selectedGroup?.group_id == data.group_id) {
         setAllMessages((prev) => [...prev, data]);
       }
@@ -199,12 +216,14 @@ export function ShowGroupChat({
                   <li
                     key={user.user_id}
                     onClick={() => {
-                      setInput(` @ ${user.first_name} ${user.last_name}`),
+                      setInput(
+                        ` ${input} ${user.first_name} ${user.last_name}`
+                      ),
                         setShowDropdown(false);
                     }}
                     className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
                   >
-                    @{(user.first_name as string) + " " + user.last_name}
+                    @{user.first_name + " " + user.last_name}
                   </li>
                 ))}
               </ul>
