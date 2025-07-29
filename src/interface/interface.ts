@@ -37,7 +37,9 @@ export interface AllGroupsProps {
 export interface GroupChat {
   message: string;
   createdAt: Date;
+  receiver_id:number | null;
   sender: User;
+  group_id:number
 }
 
 export interface GroupChatProps {

@@ -1,4 +1,10 @@
-import { addMember, findUser, individualUser, loggedInUser, logInUser } from "@/api/handler";
+import {
+  addMember,
+  findUser,
+  individualUser,
+  loggedInUser,
+  logInUser,
+} from "@/api/handler";
 import { useSelectedGroupContext } from "../hook";
 import type { User } from "@/interface/interface";
 import { useState } from "react";
@@ -14,8 +20,8 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
   const [value, setvalue] = useState("");
   const [searchUsers, setSearchUsers] = useState<User[]>([]);
   const { selectedGroup } = useSelectedGroupContext();
-  const {socket}= useSocketContext()
-  const {loggedInUser} = useLoggedInUserContext();
+  const { socket } = useSocketContext();
+  const { loggedInUser } = useLoggedInUserContext();
   const searchUser = async () => {
     const params = new URLSearchParams({
       value: value || "",
@@ -32,13 +38,24 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
     const formData = new FormData();
     const user_id = String(user.user_id);
     const group_id = String(selectedGroup?.group_id);
-    const admin_name = String(loggedInUser?.first_name +" "+loggedInUser?.last_name)
+    const admin_name = String(
+      loggedInUser?.first_name + " " + loggedInUser?.last_name
+    );
+    const user_name = String(user.first_name + " " + user.last_name);
     formData.append("member_id", user_id);
     formData.append("group_id", group_id);
     const response = await addMember(formData);
     const newMember = await individualUser(response.data.data.user_id);
     addUSer(newMember.data.data);
-    socket!.emit("add member to group", user_id, group_id,admin_name);
+    socket!.emit("add member to group", user_id, group_id, admin_name);
+    socket!.emit(
+      "send group message",
+      loggedInUser?.user_id,
+      group_id,
+      `${admin_name}  added ${user_name}`,
+      selectedGroup?.group_name,
+      user_id
+    );
   };
 
   if (!isOpen) return null;

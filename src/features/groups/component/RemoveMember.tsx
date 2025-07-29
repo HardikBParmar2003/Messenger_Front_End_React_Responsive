@@ -13,7 +13,7 @@ export function RemoveMember({
   const [value, setValue] = useState("");
   const { selectedGroup } = useSelectedGroupContext();
   const { loggedInUser } = useLoggedInUserContext();
-  const {socket} = useSocketContext()
+  const { socket } = useSocketContext();
 
   const filteredUsers = useMemo(() => {
     return groupUsers.filter((user) =>
@@ -27,10 +27,22 @@ export function RemoveMember({
     const formData = new FormData();
     const user_id = String(user.user_id);
     const group_id = String(selectedGroup?.group_id);
+    const admin_name = String(
+      loggedInUser?.first_name + " " + loggedInUser?.last_name
+    );
+    const user_name = String(user.first_name + " " + user.last_name);
     formData.append("member_id", user_id);
     formData.append("group_id", group_id);
     await removeUser(formData);
-    socket!.emit("remove member",user_id,group_id,selectedGroup?.group_name)
+    socket!.emit("remove member", user_id, group_id, selectedGroup?.group_name);
+    socket!.emit(
+      "send group message",
+      loggedInUser?.user_id,
+      group_id,
+      `${admin_name}  remove ${user_name}`,
+      selectedGroup?.group_name,
+      user_id
+    );
     removeMember(user.user_id as number);
   };
 

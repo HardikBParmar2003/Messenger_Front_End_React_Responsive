@@ -57,15 +57,11 @@ export function ShowGroupChat({
       const message: string = inputMessageRef.current.value.trim();
       const sender_id: number = Number(loggedInUser?.user_id);
       const group_id: number = Number(selectedGroup?.group_id);
-      const sender_name = String(
-        loggedInUser?.first_name + " " + loggedInUser?.last_name
-      );
       socket.emit(
         "send group message",
         sender_id,
         group_id,
         message,
-        sender_name,
         selectedGroup?.group_name
       );
       inputMessageRef.current.value = "";
@@ -84,6 +80,7 @@ export function ShowGroupChat({
   useEffect(() => {
     if (!selectedGroup) return;
     socket.on("send group message back", (data, group_name: string) => {
+      console.log("hello");
       if (loggedInUser?.user_id != data.sender.user_id) {
         sendNotification(
           `New message from ${group_name} group by ${
@@ -150,6 +147,7 @@ export function ShowGroupChat({
     }
   }, [input]);
 
+  console.log("added remove msg is:", groupChatByDate);
   return (
     <div className="flex flex-col h-[96.5%]  ">
       <div
@@ -166,25 +164,44 @@ export function ShowGroupChat({
           })
           .map(([date, chat]) => (
             <div key={date}>
-              <span className="block w-[15%] text-center mb-4  p-0.5 bg-gray-300 rounded-md m-auto ">
+              <span className="block w-[15%] text-center text-sm px-3 py-1 bg-gray-300 rounded-full m-auto ">
                 {date}
               </span>
+
+              <span></span>
               {chat.map((msg, index) => {
                 const isSender = msg.sender.user_id === loggedInUser?.user_id;
                 const newDate: Date = new Date(msg.createdAt);
                 const newTime: string =
                   newDate.getHours() + ":" + newDate.getMinutes();
+                console.log("message is:", msg, msg.receiver_id, msg.group_id);
+                if (msg.receiver_id && msg.group_id) {
+                  console.log("yessss ");
+                  return (
+                    <div key={index} className="flex justify-center my-2">
+                      <span className="bg-yellow-200 text-sm px-3 py-1 rounded-full shadow">
+                        {msg.message}
+                      </span>
+                    </div>
+                  );
+                }
 
-                return isSender ? (
-                  <div key={index} className="flex mb-4 rounded-md justify-end">
-                    <div className=" m-2 p-1.5 text-left bg-green-100 max-w-[70%] min-w-[10%] break-words rounded-xl">
-                      <span>{msg.message}</span>
-                      <div className="text-xs text-gray-500 mt-1 text-right">
-                        {newTime}
+                if (isSender) {
+                  return (
+                    <div
+                      key={index}
+                      className="flex mb-4 rounded-md justify-end"
+                    >
+                      <div className=" m-2 p-1.5 text-left bg-green-100 max-w-[70%] min-w-[10%] break-words rounded-xl">
+                        <span>{msg.message}</span>
+                        <div className="text-xs text-gray-500 mt-1 text-right">
+                          {newTime}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ) : (
+                  );
+                }
+                return (
                   <div key={index} className="flex mb-4 mr-auto ">
                     <div className="max-w-[70%] m-2 p-1 bg-white text-left break-words min-w-[20%] rounded-xl ">
                       <div className="flex mb-2">
