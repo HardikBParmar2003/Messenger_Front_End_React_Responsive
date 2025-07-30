@@ -96,7 +96,7 @@ export function RemoveMember({
               </div>
             ))
           ) : (
-            <li className=" mr-5 text-2xl"> Search to chat </li>
+            <li className=" mr-5 text-2xl"> No User Found </li>
           )}
         </ul>
       </div>

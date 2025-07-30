@@ -93,5 +93,4 @@ export interface SelectedGroupContextType {
 export interface ChatDataTypeProps {
   ChatData: Chat[] | null;
   setUsers: Dispatch<SetStateAction<User[]>>;
-  users:User[]
 }

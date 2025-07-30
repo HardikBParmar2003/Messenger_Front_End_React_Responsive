@@ -18,7 +18,6 @@ export function Login() {
   useEffect(() => {
     const token = getCookie("jwt_token");
     if (token) {
-      alert("You are logged in user");
       navigate("/home/");
     }
   }, [navigate]);

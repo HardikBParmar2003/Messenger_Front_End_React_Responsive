@@ -23,23 +23,30 @@ export function AllGroups({ groups }: AllGroupsProps) {
         }
       />
       <ul className="w-[300px] mr-10 ml-10 h-[550px] overflow-y-auto">
-        {filteredGroup.map((group: Group) => (
-          <li
-            key={group.group_id}
-            className={`user-list flex items-center space-x-2 p-[5%] ml-5 mt-2 w-[80%]  cursor-pointer ${
-              group.group_id === selectedGroup?.group_id
-                ? "bg-gray-400 text-black rounded-xl"
-                : "hover:bg-gray-100"
-            }`}
-            onClick={() => setSelectedGroup(group)}
-          >
-            <img
-              src={group.profile_photo}
-              className="user-profile-image w-8 h-8 rounded-full cursor-pointer ring-2 ring-red-200"
-            />
-            <span className="user-name">{group.group_name}</span>
-          </li>
-        ))}
+        {filteredGroup.length > 0 ? (
+          <>
+            {filteredGroup.map((group: Group) => (
+              <li
+                key={group.group_id}
+                className={`user-list flex items-center space-x-2 p-[5%] ml-5 mt-2 w-[80%]  cursor-pointer ${
+                  group.group_id === selectedGroup?.group_id
+                    ? "bg-gray-400 text-black rounded-xl"
+                    : "hover:bg-gray-100"
+                }`}
+                onClick={() => setSelectedGroup(group)}
+              >
+                <img
+                  src={group.profile_photo}
+                  className="user-profile-image w-8 h-8 rounded-full cursor-pointer ring-2 ring-red-200"
+                />
+                <span className="user-name">{group.group_name}</span>
+              </li>
+            ))}
+          </>
+        ) : (
+          <li className="p-5 m-5 w-[80%] text-2xl ">No Group Found</li>
+
+        )}
       </ul>
     </div>
   );

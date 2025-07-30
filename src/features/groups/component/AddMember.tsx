@@ -88,29 +88,35 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
           </button>
         </div>
 
-        <ul className="w-[90%]  m-2 p-5 overflow-y-auto h-[70%]">
-          {searchUsers.length > 0 ? (
-            searchUsers.map((user: User) => (
-              <li key={user.user_id} className="user-list w-[100%] flex p-3">
-                <img
-                  src={user.profile_photo}
-                  className="user-profile-image cursor-pointer w-8 h-8 rounded-full ring-2 ring-red-200"
-                />
-                <span className="user-name w-[290px] ">
-                  {user.first_name + " " + user.last_name}
-                </span>
-                <button
-                  className="bg-gray-300 rounded-md p-1.5 ml-10 cursor-pointer hover:ring-2 hover:ring-blue-500"
-                  onClick={() => add(user)}
-                >
-                  ADD
-                </button>
-              </li>
-            ))
-          ) : (
-            <li className=" mr-5 text-2xl"> Search to ADD </li>
-          )}
-        </ul>
+        {value ? (
+          <ul className="w-[90%]  m-2 p-5 overflow-y-auto h-[70%]">
+            {searchUsers.length > 0 ? (
+              searchUsers.map((user: User) => (
+                <li key={user.user_id} className="user-list w-[100%] flex p-3">
+                  <img
+                    src={user.profile_photo}
+                    className="user-profile-image cursor-pointer w-8 h-8 rounded-full ring-2 ring-red-200"
+                  />
+                  <span className="user-name w-[290px] ">
+                    {user.first_name + " " + user.last_name}
+                  </span>
+                  <button
+                    className="bg-gray-300 rounded-md p-1.5 ml-10 cursor-pointer hover:ring-2 hover:ring-blue-500"
+                    onClick={() => add(user)}
+                  >
+                    ADD
+                  </button>
+                </li>
+              ))
+            ) : (
+              <li className=" mr-5 text-2xl"> No User found </li>
+            )}
+          </ul>
+        ) : (
+          <ul>
+            <li className="p-5 m-5 w-[80%] text-2xl ">Searh user to add</li>
+          </ul>
+        )}
       </div>
     </div>
   );

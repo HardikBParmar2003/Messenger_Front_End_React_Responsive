@@ -7,18 +7,21 @@ import { toast } from "react-toastify";
 import { useLoggedInUserContext } from "../../user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { ShowChatData } from "./index";
+import { UserProfile } from "@/features/user/components/UserProfile";
 
 export function Chat({ users, setUsers }: chatProps) {
   const { selectedUser, setSelectedUser } = useSelectedUserContext();
   const { loggedInUser } = useLoggedInUserContext();
   const [loading, setLoading] = useState<boolean>(false);
   const [chatData, setChatData] = useState<Chat[]>([]);
+  const [modal, setModal] = useState<boolean>(false);
+  const [userId, setUserId] = useState<number>();
   useEffect(() => {
     if (!selectedUser) {
       setSelectedUser(loggedInUser!);
     }
     const user_id: number = Number(selectedUser?.user_id);
-    async function FetchChatData():Promise<void> {
+    async function FetchChatData(): Promise<void> {
       try {
         if (user_id) {
           const response = await fetchChatData(user_id);
@@ -55,14 +58,22 @@ export function Chat({ users, setUsers }: chatProps) {
     }
   }
 
+  const onClose = () => {
+    setModal(false);
+  };
+
   return (
     <>
       <div className="flex m-1 justify-between">
         <div className="flex mt-1">
           <img
             src={selectedUser?.profile_photo}
-            className="user-profile-image w-[60px] h-[60px] rounded-full ring-2 ring-red-200"
+            className="user-profile-image w-[60px] h-[60px] rounded-full ring-2 ring-red-200 cursor-pointer"
             key={selectedUser?.user_id}
+            onClick={() => {
+              setModal(true);
+              setUserId(selectedUser?.user_id);
+            }}
           />
           {loggedInUser?.user_id === selectedUser?.user_id ? (
             <span className="text-lg m-[15px]">
@@ -106,7 +117,8 @@ export function Chat({ users, setUsers }: chatProps) {
           )}
         </div>
       </div>
-      <ShowChatData ChatData={chatData} setUsers={setUsers} users={users}/>
+      <ShowChatData ChatData={chatData} setUsers={setUsers} />
+      {modal && <UserProfile onClose={onClose} userId={Number(userId)} />}
     </>
   );
 }

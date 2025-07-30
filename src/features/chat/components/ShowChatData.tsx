@@ -5,11 +5,10 @@ import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useLoggedInUserContext } from "@/features/user/hooks/index";
 import { useSelectedUserContext } from "../hooks/index";
 import { useNotifictionContext } from "@/features/auth/hooks/NotificationFunction";
-import type { Chat, ChatDataTypeProps, User } from "@/interface/interface";
-import { chattingUsers } from "@/api/chat.api";
+import type { Chat, ChatDataTypeProps } from "@/interface/interface";
 import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 
-export function ShowChatData({ ChatData, setUsers, users }: ChatDataTypeProps) {
+export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   const { loggedInUser } = useLoggedInUserContext();
   const { selectedUser } = useSelectedUserContext();
   const { sendNotification } = useNotifictionContext();

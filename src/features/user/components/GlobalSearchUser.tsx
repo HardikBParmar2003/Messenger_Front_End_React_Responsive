@@ -1,6 +1,8 @@
 import { findUser } from "@/api/handler";
 import { useSelectedUserContext } from "@/features/chat/hooks";
+import { faL } from "@fortawesome/free-solid-svg-icons";
 import { useEffect, useState, type FC } from "react";
+import { UserProfile } from "./UserProfile";
 
 interface User {
   user_id: number;
@@ -15,6 +17,8 @@ export const GlobalSearchUser: FC = () => {
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const { setSelectedUser } = useSelectedUserContext();
+  const [userId, setUserId] = useState<number | null>();
+  const [modal, setModal] = useState<boolean>(false);
 
   useEffect(() => {
     const debouncingFunction = setTimeout(() => {
@@ -47,6 +51,10 @@ export const GlobalSearchUser: FC = () => {
     setPage(newPage);
   };
 
+  const onClose = () => {
+    setModal(false);
+  };
+
   return (
     <div>
       <input
@@ -60,30 +68,42 @@ export const GlobalSearchUser: FC = () => {
         }}
       />
 
-      <ul className="w-[300px] h-[500px] m-5 overflow-y-auto border border-gray-300">
-        {searchUsers.length > 0 ? (
-          searchUsers.map((user) => (
-            <li key={user.user_id} className="flex p-1.5 items-center">
-              <img
-                src={user.profile_photo}
-                alt={`${user.first_name} ${user.last_name}`}
-                className="w-8 h-8 rounded-full ring-2 ring-red-200"
-              />
-              <span className="ml-3 truncate w-[190px]">
-                {user.first_name} {user.last_name}
-              </span>
-              <button
-                className="ml-auto bg-gray-300 rounded-md p-1.5 hover:ring-3 hover:ring-gray-500"
-                onClick={() => setSelectedUser(user)}
-              >
-                Chat
-              </button>
-            </li>
-          ))
-        ) : (
-          <li className="text-center p-3">Search to chat</li>
-        )}
-      </ul>
+      {value ? (
+        <ul className="w-[300px] h-[500px] m-5 overflow-y-auto border border-gray-300">
+          {searchUsers.length > 0 ? (
+            searchUsers.map((user) => (
+              <li key={user.user_id} className="flex p-1.5 items-center">
+                <img
+                  src={user.profile_photo}
+                  alt={`${user.first_name} ${user.last_name}`}
+                  className="w-8 h-8 rounded-full ring-2 ring-red-200 cursor-pointer"
+                  onClick={() => {
+                    setUserId(user.user_id);
+                    setModal(true);
+                  }}
+                />
+                <span className="ml-3 truncate w-[190px]">
+                  {user.first_name} {user.last_name}
+                </span>
+                <button
+                  className="ml-auto bg-gray-300 rounded-md p-1.5 hover:ring-3 hover:ring-gray-500"
+                  onClick={() => setSelectedUser(user)}
+                >
+                  Chat
+                </button>
+              </li>
+            ))
+          ) : (
+            <li className="text-center p-5 m-5 w-[80%] text-2xl">No User Found</li>
+          )}
+        </ul>
+      ) : (
+        <ul>
+          <li className="text-center p-5 m-5 w-[80%] text-xl">
+            Start Search To Chat
+          </li>
+        </ul>
+      )}
 
       {totalPages > 1 && (
         <div className="flex justify-center space-x-2">
@@ -118,6 +138,7 @@ export const GlobalSearchUser: FC = () => {
           </button>
         </div>
       )}
+      {modal && <UserProfile onClose={onClose} userId={Number(userId)} />}
     </div>
   );
 };

@@ -43,7 +43,7 @@ export function UserProfile({ onClose, userId }: userProfileTypes) {
           >
             <span className="text-xl font-semibold leading-none">&times;</span>
           </button>
-          <h2 className="text-xl font-semibold mt-4 mb-4">View User</h2>
+          <h2 className="text-xl font-semibold mt-4 mb-4">User Profile</h2>
           <div className="flex justify-center mb-3 border-b-1">
             <img
               src={user?.profile_photo}
@@ -77,7 +77,7 @@ export function UserProfile({ onClose, userId }: userProfileTypes) {
           </div>
 
           <div className="flex justify-end space-x-2">
-            <button onClick={onClose} className="px-4 py-2 bg-gray-200 rounded">
+            <button onClick={onClose} className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300">
               Cancel
             </button>
           </div>
