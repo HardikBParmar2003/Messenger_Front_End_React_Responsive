@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLoggedInUserContext } from "../../user/hooks/index";
+import { useSocketContext } from "@/features/auth/hooks/SocketContext";
 import {
   deleteGroupData,
   getGroupChat,
@@ -38,6 +39,7 @@ export function GroupChat({
 }: GroupUserProps) {
   const { selectedGroup, setSelectedGroup } = useSelectedGroupContext();
   const { loggedInUser } = useLoggedInUserContext();
+  const { socket } = useSocketContext();
   const [chatData, setChatData] = useState([]);
   const [groupUser, setGroupUsers] = useState<User[]>([]);
   const [isEditOpen, setIsEditOpen] = useState<boolean>(false);
@@ -111,9 +113,18 @@ export function GroupChat({
     );
     if (left) {
       const group_id = selectedGroup?.group_id as number;
+      const use_name = loggedInUser?.first_name + " " + loggedInUser?.last_name;
       await userLeftGroup(group_id);
       setSelectedGroup(null);
       onDeleteGroup(group_id);
+      socket!.emit(
+        "send group message",
+        loggedInUser?.user_id,
+        group_id,
+        `${use_name}  left group`,
+        selectedGroup?.group_name,
+        loggedInUser?.user_id
+      );
       toast.success("User left from the group successfuly");
     } else {
       return;

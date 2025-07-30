@@ -82,11 +82,9 @@ export function GroupHome() {
     socket.on(
       "remove member back",
       (group_id: number, user_id: number, group_name: string) => {
-        // if (user_id == loggedInUser?.user_id) {
           sendNotification("Remove From Group", {
             body: `${loggedInUser?.first_name + " "+ loggedInUser?.last_name} removed from ${group_name}`,
           });
-        // }
         onDeleteGroup(group_id);
       }
     );
