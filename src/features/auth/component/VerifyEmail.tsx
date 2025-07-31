@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { getCookie } from "../function";
 import { toast } from "react-toastify";
-import { Link } from "react-router-dom";
 
 export function VerifyEmail() {
   const navigate = useNavigate();

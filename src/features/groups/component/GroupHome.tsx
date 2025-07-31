@@ -19,7 +19,7 @@ export function GroupHome() {
   async function fetchOneGroupData(
     group_id: number,
     admin_name: string,
-    user_id: number
+    // user_id: number
   ) {
     const response = await getGroupData(group_id);
     const groupData: Group = response.data.data;
@@ -69,8 +69,8 @@ export function GroupHome() {
 
   useEffect(() => {
     if (!socket) return;
-    socket.on("add member to group back", (group_id, admin_name, user_id) => {
-      fetchOneGroupData(group_id, admin_name, user_id);
+    socket.on("add member to group back", (group_id, admin_name) => {
+      fetchOneGroupData(group_id, admin_name);
     });
     return () => {
       socket.off("add member to group back");
@@ -81,7 +81,7 @@ export function GroupHome() {
     if (!socket) return;
     socket.on(
       "remove member back",
-      (group_id: number, user_id: number, group_name: string) => {
+      (group_id: number, group_name: string) => {
           sendNotification("Remove From Group", {
             body: `${loggedInUser?.first_name + " "+ loggedInUser?.last_name} removed from ${group_name}`,
           });

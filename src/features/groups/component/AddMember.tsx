@@ -2,8 +2,6 @@ import {
   addMember,
   findUser,
   individualUser,
-  loggedInUser,
-  logInUser,
 } from "@/api/handler";
 import { useSelectedGroupContext } from "../hook";
 import type { User } from "@/interface/interface";
