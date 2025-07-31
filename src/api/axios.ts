@@ -27,6 +27,7 @@ api.interceptors.response.use(
     } else if (error.response?.status == 500) {
       toast.error(error.response?.data.message);
     }
+    console.log("error is:",error)
     return Promise.reject(error);
   }
 );
