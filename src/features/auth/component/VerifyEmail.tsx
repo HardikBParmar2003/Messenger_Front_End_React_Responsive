@@ -8,7 +8,7 @@ export function VerifyEmail() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const user_email = getCookie("user_email");
+    const user_email = getCookie.getEmail();
     if (!user_email) {
       toast.error("First verify email");
       setTimeout(() => {

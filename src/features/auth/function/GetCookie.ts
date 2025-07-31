@@ -1,8 +1,18 @@
-export const getCookie = (name: string) => {
-  const allCOokies = document.cookie.split(";");
-  for (let cookie of allCOokies) {
-    const [key, value] = cookie.split("=");
-    if (key.trim() === name) return decodeURIComponent(value);
+import { getEmail, getToken } from "@/api/auth.api";
+
+export const getCookie =  {
+  async getToken(){
+    const isToken = await getToken()
+    console.log("isToken");
+    if(isToken){
+      console.log("is token is:",isToken);
+      return  isToken
+    }else{
+
+    }
+  },
+  async getEmail(){
+    const isEmail = await getEmail()
+    console.log("is email is:",isEmail);
   }
-  return null;
 };

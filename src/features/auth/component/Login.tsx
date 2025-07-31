@@ -16,10 +16,11 @@ export function Login() {
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
-    const token = getCookie("jwt_token");
-    if (token) {
-      navigate("/home/");
-    }
+    const token =  getCookie.getToken()
+
+    // if (token) {
+    //   navigate("/home/");
+    // }
   }, [navigate]);
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
