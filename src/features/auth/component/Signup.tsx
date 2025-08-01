@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { SignUpSchema } from "../schema/SignUpSchema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { getToken, signUpUser } from "@/api/handler";
+import { getEmail, getToken, signUpUser } from "@/api/handler";
 import { useNavigate } from "react-router";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
@@ -23,7 +23,7 @@ export function Signup() {
 
   useEffect(() => {
     async function verifyToken() {
-      const token = await getToken();
+      const token = await getEmail();
       if (!token.data.data) {
         toast.error("First verify Email");
         navigate("/auth/newUser");
