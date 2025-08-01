@@ -9,7 +9,7 @@ export function VerifyEmail() {
   useEffect(() => {
     async function verifyEmail() {
       const user_email = await getEmail();
-      if (!user_email.data) {
+      if (!user_email.data.data) {
         toast.error("First verify email");
         setTimeout(() => {
           navigate("/auth/login");
