@@ -24,7 +24,7 @@ export function Signup() {
   useEffect(() => {
     async function verifyToken() {
       const token = await getToken();
-      if (!token.data) {
+      if (!token.data.data) {
         toast.error("First verify Email");
         navigate("/auth/newUser");
       }

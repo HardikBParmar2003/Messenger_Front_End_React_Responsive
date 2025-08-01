@@ -17,8 +17,8 @@ export function Login() {
   useEffect(() => {
     async function verifyToken() {
       const token = await getToken();
-      if(token.data){
-        navigate("/home/");
+      if(token.data.data == true){
+        navigate("/home");
       }
     }
     verifyToken()
