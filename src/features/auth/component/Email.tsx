@@ -61,13 +61,13 @@ export function Email() {
           <>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md w-full"
+              className="w-full bg-blue-600 text-white py-2 rounded-md"
             >
               Send OTP
             </button>
             <Link
               to="/auth/login"
-              className="block text-center text-blue-500 mt-2"
+              className="block text-center text-blue-500 mt-2 w-full bg-blue-100"
             >
               Already have an account? Log in
             </Link>
