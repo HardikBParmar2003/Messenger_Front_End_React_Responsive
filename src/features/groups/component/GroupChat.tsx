@@ -164,7 +164,7 @@ export function GroupChat({
             {loggedInUser?.user_id === selectedGroup.user_id ? (
               <div className="flex justify-between w-[80%] sm:w-full">
                 <div className="m-2">
-                  <span className="text-lg m-[15px] sm:text-base sm:m-3">
+                  <span className="text-xl m-[15px] sm:text-base sm:m-3">
                     {selectedGroup?.group_name}
                   </span>
                 </div>
@@ -219,7 +219,7 @@ export function GroupChat({
                 <span className="text-xl m-[15px] sm:m-3">
                   {selectedGroup?.group_name}
                 </span>
-                <div className="flex w-[23%] justify-between bg-amber-5000 text-2xl p-2">
+                <div className="flex w-[23%] justify-between bg-amber-5000 text-lg p-2">
                   <button onClick={() => setIsViewMember(true)}>
                     <FontAwesomeIcon
                       icon={faEye}
