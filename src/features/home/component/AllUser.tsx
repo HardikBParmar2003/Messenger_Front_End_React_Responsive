@@ -36,17 +36,19 @@ export const AllUser: FC = () => {
   if (error) return <p>Error: {error}</p>;
 
   return (
-    <div className="bg-gray-200 h-[750px]">
+    <div className="bg-gray-100 min-h-screen">
       <NavBar />
       <SelectedUserContextProvider>
-        <div className="flex h-screen m-5">
-          <div className="w-[25%] h-[80%] border- border-gray-400 bg-anmber-400">
+        <div className="flex flex-col lg:flex-row gap-4 p-4 h-[calc(100vh-80px)]">
+          <div className="w-full lg:w-1/4 bg-white border rounded-md p-2 shadow">
             <LocalSearchUser users={users} />
           </div>
-          <div className="w-[53%] h-[80%] border border-gray-400 bg-gray-300">
+
+          <div className="w-full lg:w-1/2 bg-white border rounded-md p-2 shadow flex-1">
             <Chat users={users} setUsers={setUsers} />
           </div>
-          <div className="w-[22%]  h-[80%]">
+
+          <div className="w-full lg:w-1/4 bg-white border rounded-md p-2 shadow">
             <GlobalSearchUser />
           </div>
         </div>

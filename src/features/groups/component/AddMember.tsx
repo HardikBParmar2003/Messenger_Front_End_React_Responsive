@@ -127,8 +127,8 @@ export function AddMember({ isOpen, onClose, addUSer }: AddMemberProps) {
           </ul>
         )}
       </div>
-            {modal && <UserProfile onClose={closeModal} userId={Number(userId)} />}
-      
+      {modal && <UserProfile onClose={closeModal} userId={Number(userId)} />}
+
     </div>
   );
 }

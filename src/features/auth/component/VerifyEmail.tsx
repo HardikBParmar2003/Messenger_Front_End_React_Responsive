@@ -2,6 +2,7 @@ import { getEmail, verifyOtp } from "@/api/handler";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
+import { AuthWrapper } from ".";
 
 export function VerifyEmail() {
   const navigate = useNavigate();
@@ -29,24 +30,31 @@ export function VerifyEmail() {
     navigate("/auth/signup");
   };
   return (
-    <div className="bg--200 flex justify-center items-center min-h-screen">
-      <form onSubmit={handleSubmit}>
-        <p className="text-2xl font-bold mb-5 text-center">Verify OTP:</p>
+    <AuthWrapper>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <h2 className="text-2xl font-bold text-center">Verify OTP</h2>
+
         <div>
-          <label htmlFor="otp">OTP::</label>
+          <label htmlFor="otp" className="block mb-1">
+            OTP:
+          </label>
           <input
             type="text"
             id="otp"
             value={otp}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-              setOtp(e.target.value)
-            }
+            onChange={(e) => setOtp(e.target.value)}
             required
+            className="w-full px-4 py-2 border rounded-md"
           />
         </div>
 
-        <button type="submit">Send Otp</button>
+        <button
+          type="submit"
+          className="w-full bg-blue-600 text-white py-2 rounded-md"
+        >
+          Verify OTP
+        </button>
       </form>
-    </div>
+    </AuthWrapper>
   );
 }

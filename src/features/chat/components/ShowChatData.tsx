@@ -115,42 +115,37 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
   }, [allMessages]);
 
   return (
-    <div className="flex flex-col h-[92%] ">
+    <div className="flex flex-col h-[91%] ">
       <div
         ref={chatContainerRef}
-        className="flex-1 p-6 bg-gray-100 overflow-y-auto h-["
+        className="flex-1 p-6 bg-gray-100 overflow-y-auto"
+        aria-live="polite"
+        aria-label="Chat messages"
       >
-        {Object.entries(groupChatByDate).map(([date, chat]) => (
+        {Object.entries(groupChatByDate).map(([date, chats]) => (
           <div key={date}>
-            <span className="block w-[15%] text-center mb-4  p-0.5 bg-gray-300 rounded-md m-auto ">
+            <span className="block w-1/6 text-center mb-4 p-1 bg-gray-300 rounded-md mx-auto font-semibold">
               {date}
             </span>
-            {chat.map((msg, index) => {
+            {chats.map((msg, idx) => {
               const isSender = msg.sender_id === loggedInUser?.user_id;
-              const newDate: Date = new Date(msg.createdAt);
-              const newTime: string =
-                newDate.getHours() + ":" + newDate.getMinutes();
-              return isSender ? ( // I can also user conditional class name but I have used it once so I practice this
+              const msgDate = new Date(msg.createdAt);
+              const formattedTime = msgDate.toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              });
+
+              return (
                 <div
-                  key={index}
-                  className="flex mb-4 w-[20%] bg-green-100 ml-auto rounded-md text-left"
+                  key={idx}
+                  className={`flex mb-4 w-1/5 rounded-md ${
+                    isSender ? "bg-green-100 ml-auto" : "bg-white mr-auto"
+                  }`}
                 >
-                  <div className="w-full m-2 text-left">
+                  <div className="w-full m-2 text-left break-words">
                     {msg.message}
                     <div className="text-xs text-gray-500 mt-1 text-right">
-                      {newTime}
-                    </div>
-                  </div>
-                </div>
-              ) : (
-                <div
-                  key={index}
-                  className="flex  mb-4 w-[20%] bg-white mr-auto  rounded-md"
-                >
-                  <div className="w-full m-2 text-left">
-                    {msg.message}
-                    <div className="text-xs text-gray-500 mt-1 text-right">
-                      {newTime}
+                      {formattedTime}
                     </div>
                   </div>
                 </div>
@@ -159,18 +154,34 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
           </div>
         ))}
       </div>
-      <div className="bg-gray-300 p-1 mt-1 h-auto ">
+
+      <div className="bg-gray-300 p-2 mt-1 flex items-center rounded-xl">
         <input
           type="text"
           placeholder="ENTER MESSAGE"
-          className="w-[85%] mx-auto p-1.5 border rounded-4xl bg-white"
+          className="
+    flex-grow  border border-gray-800 bg-white
+    focus:outline-none
+    focus:ring-2 focus:ring-red-400
+    focus:ring-offset-0
+    focus:ring-inset
+    transition
+  "
           ref={inputMessageRef}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") sendMessage();
+          }}
+          aria-label="Type a message"
         />
         <button
-          className="bg-red-600-200 p-2.5 ml-4 border rounded-full min-w-[50px] cursor-pointer"
+          className="flex items-center justify-center bg-gray-200 p-3 rounded-full min-w-[48px] hover:bg-green-400 transition-colors duration-300"
           onClick={sendMessage}
+          aria-label="Send Message"
         >
-          <FontAwesomeIcon icon={faPaperPlane} className="text-green-800 " />
+          <FontAwesomeIcon
+            icon={faPaperPlane}
+            className="text-green-800 hover:text-black transition-colors duration-300"
+          />
         </button>
       </div>
     </div>

@@ -28,50 +28,42 @@ export function LocalSearchUser({ users }: LocalSearchUserProps) {
       <input
         type="text"
         placeholder="Search local chat users"
-        className="input"
+        className="input w-full px-3 py-2 border rounded mb-2"
         value={searchValue}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-          setSearchValue(e.target.value)
-        }
+        onChange={(e) => setSearchValue(e.target.value)}
       />
-      <ul className="w-[300px] m-6 h-[550px] overflow-y-auto bg-white rounded-xl">
+      <ul className="h-[550px] overflow-y-auto bg-white rounded-xl space-y-2 p-2">
         {filteredUsers.length > 0 ? (
-          <>
-            {filteredUsers.map((user: User) => (
-              <li
-                key={user.user_id}
-                className={`user-list w-[80%] flex items-center space-x-2 p-[5%] ml-5 mt-2 cursor-pointer ${
-                  user.user_id === selectedUser?.user_id
-                    ? "bg-gray-400 text-black rounded-xl"
-                    : "hover:bg-gray-300 rounded-xl"
-                }`}
-                onClick={() => setSelectedUser(user)}
-              >
-                <img
-                  src={user.profile_photo}
-                  className="user-profile-image w-8 h-8 rounded-full cursor-pointer ring-2 ring-red-200"
-                  onClick={() => {
-                    setModal(true);
-                    setUserId(user.user_id);
-                  }}
-                />
-                {user.user_id == loggedInUser?.user_id ? (
-                  <span className="user-name">
-                    {user.first_name + " " + user.last_name + " (You)"}
-                  </span>
-                ) : (
-                  <span className="user-name">
-                    {user.first_name + " " + user.last_name}
-                  </span>
-                )}
-              </li>
-            ))}
-          </>
+          filteredUsers.map((user: User) => (
+            <li
+              key={user.user_id}
+              className={`flex items-center gap-3 p-2 rounded-xl cursor-pointer ${
+                user.user_id === selectedUser?.user_id
+                  ? "bg-gray-400"
+                  : "hover:bg-gray-300"
+              }`}
+              onClick={() => setSelectedUser(user)}
+            >
+              <img
+                src={user.profile_photo}
+                className="w-9 h-9 rounded-full ring-2 ring-red-200 cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setModal(true);
+                  setUserId(user.user_id);
+                }}
+              />
+              <span className="truncate">
+                {user.first_name} {user.last_name}
+                {user.user_id === loggedInUser?.user_id && " (You)"}
+              </span>
+            </li>
+          ))
         ) : (
-          <li className="p-5 m-5 w-[80%] text-2xl ">No User Found</li>
+          <li className="text-center text-gray-400">No User Found</li>
         )}
       </ul>
-      {modal && <UserProfile onClose={onClose} userId={Number(userId)} />}
+      {modal && <UserProfile onClose={onClose} userId={Number(userId)} />}{" "}
     </div>
   );
 }
