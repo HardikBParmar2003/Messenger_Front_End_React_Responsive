@@ -13,7 +13,7 @@ export const ShowPasswordButton = ({
     <button
       type="button"
       onClick={onToggle}
-      className="p-2 bg-amber-300 rounded-md h-11  cursor-pointer"
+      className="p-2.5 bg-amber-300 rounded-md  cursor-pointer ml-1 "
     >
       <FontAwesomeIcon
         icon={showPassword ? faEyeSlash : faEye}

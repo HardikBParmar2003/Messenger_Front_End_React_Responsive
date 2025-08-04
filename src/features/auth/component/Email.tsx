@@ -61,7 +61,7 @@ export function Email() {
           <>
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md"
+              className="w-full bg-blue-600 text-white py-2 rounded-md w-full"
             >
               Send OTP
             </button>
