@@ -67,7 +67,7 @@ export function Email() {
             </button>
             <Link
               to="/auth/login"
-              className="block text-center text-blue-500 mt-2 w-full bg-blue-100"
+              className="block text-center text-blue-500 mt-2 w-full bg-blue-100 p-2 rounded-md"
             >
               Already have an account? Log in
             </Link>
