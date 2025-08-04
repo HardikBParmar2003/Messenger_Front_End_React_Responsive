@@ -35,7 +35,7 @@ export function Email() {
         <h2 className="text-2xl font-bold text-center">Verify Email</h2>
 
         <div>
-          <label htmlFor="email" className="block mb-1">
+          <label htmlFor="email" className="block mb-1 text-left">
             Email:
           </label>
           <input

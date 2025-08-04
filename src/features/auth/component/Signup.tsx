@@ -44,19 +44,19 @@ export function Signup() {
         <h1 className="text-3xl font-bold mb-3 text-center">Sign Up</h1>
 
         <div>
-          <label>First Name:</label>
+          <label className="text-left">First Name:</label>
           <input className="w-full px-4 py-2 border rounded-md" {...register("first_name")} />
           {errors.first_name && <p className="text-red-500">{errors.first_name.message}</p>}
         </div>
 
         <div>
-          <label>Last Name:</label>
+          <label className="text-left">Last Name:</label>
           <input className="w-full px-4 py-2 border rounded-md" {...register("last_name")} />
           {errors.last_name && <p className="text-red-500">{errors.last_name.message}</p>}
         </div>
 
         <div>
-          <label>Password:</label>
+          <label className="text-left">Password:</label>
           <input type="password" className="w-full px-4 py-2 border rounded-md" {...register("password")} />
           {errors.password && <p className="text-red-500">{errors.password.message}</p>}
         </div>

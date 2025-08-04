@@ -45,8 +45,8 @@ export function Login() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <h3 className="text-3xl font-bold text-center">Log In</h3>
 
-        <div>
-          <label htmlFor="email" className="block mb-1">
+        <div> 
+          <label htmlFor="email" className="block mb-1 text-left">
             Email:
           </label>
           <input
@@ -60,7 +60,7 @@ export function Login() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block mb-1">
+          <label htmlFor="password" className="block mb-1 text-left">
             Password:
           </label>
           <input
@@ -80,7 +80,7 @@ export function Login() {
 
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2 rounded-md"
+          className="w-full bg-blue-600 text-white py-2 rounded-md "
         >
           Log In
         </button>
