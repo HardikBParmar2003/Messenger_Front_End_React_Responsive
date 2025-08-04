@@ -127,7 +127,7 @@ export const GlobalSearchUser: FC = () => {
           </button>
         </div>
       )}
-      {modal && <UserProfile onClose={onClose} userId={Number(userId)} />}u{" "}
+      {modal && <UserProfile onClose={onClose} userId={Number(userId)} />}
     </div>
   );
 };

@@ -162,13 +162,13 @@ export function GroupChat({
               key={selectedGroup?.group_id}
             />
             {loggedInUser?.user_id === selectedGroup.user_id ? (
-              <div className="flex justify-between items-center w-[80%] sm:w-full sm:flex-col sm:items-center">
-                <div className="m-3">
+              <div className="flex justify-between w-[80%] sm:w-full">
+                <div className="m-2">
                   <span className="text-lg m-[15px] sm:text-base sm:m-3">
                     {selectedGroup?.group_name}
                   </span>
                 </div>
-                <div className="flex m-3 space-x-4 text-lg sm:space-x-2 sm:w-full sm:flex-col sm:space-y-3 sm:items-center">
+                <div className="flex justify-end m-3 space-x-4 text-lg sm:space-x-2 sm:w-full">
                   <button>
                     <FontAwesomeIcon
                       icon={faEdit}
@@ -215,11 +215,11 @@ export function GroupChat({
                 </div>
               </div>
             ) : (
-              <div className="flex w-[80%] justify-between sm:w-full sm:justify-center sm:flex-col sm:items-center">
-                <span className="text-lg m-[15px] sm:text-base sm:m-3">
+              <div className="flex w-[80%] justify-between sm:w-full">
+                <span className="text-xl m-[15px] sm:m-3">
                   {selectedGroup?.group_name}
                 </span>
-                <div className="flex w-[23%] mt-2 justify-between bg-amber-5000 text-lg sm:w-full sm:space-x-2 sm:justify-center sm:mt-4 sm:flex-col">
+                <div className="flex w-[23%] justify-between bg-amber-5000 text-2xl p-2">
                   <button onClick={() => setIsViewMember(true)}>
                     <FontAwesomeIcon
                       icon={faEye}
