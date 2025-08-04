@@ -162,11 +162,13 @@ export function GroupChat({
               key={selectedGroup?.group_id}
             />
             {loggedInUser?.user_id === selectedGroup.user_id ? (
-              <div className="flex w-[80%] justify-between sm:w-full">
-                <span className="text-xl m-[15px] sm:m-3">
-                  {selectedGroup?.group_name}
-                </span>
-                <div className="flex w-[23%] justify-between bg-amber-5000 text-lg p-2">
+              <div className="flex justify-between w-[80%] sm:w-full">
+                <div className="m-2">
+                  <span className="text-xl m-[15px] sm:text-base sm:m-3">
+                    {selectedGroup?.group_name}
+                  </span>
+                </div>
+                <div className="flex justify-end m-3 space-x-4 text-lg sm:space-x-2 sm:w-full">
                   <button>
                     <FontAwesomeIcon
                       icon={faEdit}
