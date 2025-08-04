@@ -60,7 +60,7 @@ export function Login() {
         </div>
 
         <div>
-          <label htmlFor="password" className="block mb-1 text-left">
+          <label htmlFor="password" className="block mb-1 text-left ml-[12%]">
             Password:
           </label>
           <input
