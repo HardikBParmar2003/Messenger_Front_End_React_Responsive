@@ -166,7 +166,7 @@ export function GroupChat({
                 <span className="text-xl m-[15px] sm:m-3">
                   {selectedGroup?.group_name}
                 </span>
-                <div className="flex justify-end m-3 space-x-4 text-lg sm:space-x-2 sm:w-full">
+                <div className="flex justify-end m-3 space-x-4 text-lg sm:space-x-2">
                   <button>
                     <FontAwesomeIcon
                       icon={faEdit}
