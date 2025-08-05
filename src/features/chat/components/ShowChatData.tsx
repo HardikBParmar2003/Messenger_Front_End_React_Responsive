@@ -138,7 +138,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
               return (
                 <div
                   key={idx}
-                  className={`flex mb-4 w-1/5 rounded-md ${
+                  className={`flex mb-4 w-1/5 max-w-[80%] sm:max-w-[70%] md:max-w-[60%] m-2 p-2 bg-white break-words min-w-[14%] rounded-xl text-left ${
                     isSender ? "bg-green-100 ml-auto" : "bg-white mr-auto"
                   }`}
                 >
