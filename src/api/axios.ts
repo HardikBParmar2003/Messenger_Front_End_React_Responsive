@@ -2,8 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export const api = axios.create({
-  // baseURL: "https://messenger-sequelize.onrender.com",
-  baseURL: "http://localhost:4000",
+  baseURL: "https://messenger-sequelize.onrender.com",
   withCredentials: true,
 });
 
