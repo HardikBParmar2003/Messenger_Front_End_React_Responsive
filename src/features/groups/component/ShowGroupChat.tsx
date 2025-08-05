@@ -184,7 +184,7 @@ export function ShowGroupChat({
                       key={index}
                       className="flex mb-4 rounded-md justify-end"
                     >
-                      <div className="m-2 p-2 bg-green-100 max-w-[80%] sm:max-w-[70%] md:max-w-[60%] min-w-[20%] break-words rounded-xl">
+                      <div className="m-2 p-2 bg-green-100 max-w-[80%] sm:max-w-[70%] md:max-w-[60%] min-w-[14%] break-words rounded-xl text-left">
                         <span>{msg.message}</span>
                         <div className="text-xs text-gray-500 mt-1 text-right">
                           {newTime}
@@ -195,13 +195,13 @@ export function ShowGroupChat({
                 }
                 return (
                   <div key={index} className="flex mb-4 mr-auto">
-                    <div className="max-w-[80%] sm:max-w-[70%] md:max-w-[60%] m-2 p-2 bg-white break-words min-w-[20%] rounded-xl">
+                    <div className="max-w-[80%] sm:max-w-[70%] md:max-w-[60%] m-2 p-2 bg-white break-words min-w-[14%] rounded-xl text-left">
                       <div className="flex items-center mb-2">
                         <img
                           src={msg.sender.profile_photo}
                           className="w-5 h-5 rounded-full hover:cursor-pointer ring-2 ring-red-200"
                         />
-                        <span className="text-sm ml-2">
+                        <span className="text-sm ml-2 ">
                           {msg.sender.first_name} {msg.sender.last_name}
                         </span>
                       </div>
@@ -246,13 +246,19 @@ export function ShowGroupChat({
               ref={inputMessageRef}
               value={input}
               onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key == "Enter") sendMessage();
+              }}
             />
 
             <button
               className="bg-green-200 hover:bg-green-300 p-2 rounded-full flex items-center justify-center"
               onClick={sendMessage}
             >
-              <FontAwesomeIcon icon={faPaperPlane} className="text-green-800 p-2" />
+              <FontAwesomeIcon
+                icon={faPaperPlane}
+                className="text-green-800 p-2"
+              />
             </button>
           </div>
         ) : (
