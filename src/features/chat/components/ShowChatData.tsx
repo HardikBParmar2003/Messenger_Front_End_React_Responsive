@@ -87,11 +87,11 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
         });
         updatedUsers.sort(
           (a, b) =>
-            new Date(b.lastMessageAt!).getTime() - new Date(a.lastMessageAt!).getTime()
+            new Date(b.lastMessageAt!).getTime() -
+            new Date(a.lastMessageAt!).getTime()
         );
         return updatedUsers;
       });
-
     });
 
     return () => {
@@ -136,16 +136,21 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
               });
 
               return (
-                <div
-                  key={idx}
-                  className={`flex mb-4 w-1/5 max-w-[80%] sm:max-w-[70%] md:max-w-[60%] m-2 p-2 bg-white break-words min-w-[14%] rounded-xl text-left ${
-                    isSender ? "bg-green-100 ml-auto" : "bg-white mr-auto"
-                  }`}
-                >
-                  <div className="w-full m-2 text-left break-words">
-                    {msg.message}
-                    <div className="text-xs text-gray-500 mt-1 text-right">
-                      {formattedTime}
+                <div key={idx}>
+                  <div
+                    className={`flex mb-4 m-2 p-2 break-words rounded-xl w-fit max-w-[80%] sm:max-w-[70%] md:max-w-[60%]
+                              ${
+                                isSender
+                                  ? "bg-green-100 ml-auto text-left"
+                                  : "bg-white mr-auto text-left"
+                              }
+                            `}
+                  >
+                    <div className="flex flex-col">
+                      <span>{msg.message}</span>
+                      <span className="text-xs text-gray-500 mt-1 self-end">
+                        {formattedTime}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -173,12 +178,12 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
           }}
           aria-label="Type a message"
         />
-     <button
-              className="bg-green-200 hover:bg-green-300 p-2 rounded-full flex items-center justify-center ml-2"
-              onClick={sendMessage}
-            >
-              <FontAwesomeIcon icon={faPaperPlane} className="text-green-800 p-2" />
-            </button>
+        <button
+          className="bg-green-200 hover:bg-green-300 p-2 rounded-full flex items-center justify-center ml-2"
+          onClick={sendMessage}
+        >
+          <FontAwesomeIcon icon={faPaperPlane} className="text-green-800 p-2" />
+        </button>
       </div>
     </div>
   );
