@@ -17,6 +17,7 @@ export function GroupInfo({ onClose, group_id }: userProfileTypes) {
   useEffect(() => {
     async function isGroup() {
       try {
+        setLoading(true);
         const response = await getGroupData(group_id);
         if (response.data.data) {
           const newDate = new Date(response.data.data.createdAt);
@@ -27,16 +28,19 @@ export function GroupInfo({ onClose, group_id }: userProfileTypes) {
           );
           if (response.data.data.user_id == loggedInUser?.user_id) {
             setAdmin(`${loggedInUser?.first_name} ${loggedInUser?.last_name}`);
-          }else{
-            const user = await individualUser(response.data.data.user_id)
-            setAdmin(`${user.data.data.first_name} ${user.data.data.last_name}`)
+          } else {
+            const user = await individualUser(response.data.data.user_id);
+            setAdmin(
+              `${user.data.data.first_name} ${user.data.data.last_name}`
+            );
           }
-          setGroup(response.data.data)
+          setGroup(response.data.data);
         } else {
           setGroup(null);
         }
       } catch (error) {
         setGroup(null);
+        setLoading(false);
       } finally {
         setLoading(false);
       }

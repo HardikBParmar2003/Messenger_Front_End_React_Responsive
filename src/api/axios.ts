@@ -24,6 +24,8 @@ api.interceptors.response.use(
       }, 2000);
     } else if (error.response?.status == 404) {
       toast.error(error.response?.data.message);
+    } else if (error.response?.status == 403) {
+      toast.error(error.response?.data.message);
     } else if (error.response?.status == 500) {
       toast.error(error.response?.data.message);
     } else {
