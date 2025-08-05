@@ -24,6 +24,7 @@ import { AddMember, EditGroupModal, RemoveMember, ShowGroupChat } from ".";
 import { ViewGroupMember } from "./ViewGroupMember";
 import { toast } from "react-toastify";
 import { LoaderComponent } from "@/components/Loader/Loader";
+import { GroupInfo } from "./GroupInfo";
 
 type GroupUserProps = {
   onUpdateGroup: (updatedGroup: Group) => void;
@@ -47,10 +48,11 @@ export function GroupChat({
   const [isRemoveMember, setIsRemoveMember] = useState<boolean>(false);
   const [isViewMember, setIsViewMember] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
+  const [modal, setModal] = useState<boolean>(false);
+  const [groupid, setGroupId] = useState<number | null>(null);
 
   useEffect(() => {
     if (!selectedGroup) {
-      console.log("no selected group", allGroups);
       if (allGroups.length > 0) setSelectedGroup(allGroups[0]);
       else return;
     }
@@ -145,6 +147,10 @@ export function GroupChat({
     }
   }
 
+  const onClose = () => {
+    setModal(false);
+  };
+
   return (
     <>
       <div
@@ -158,8 +164,12 @@ export function GroupChat({
           <>
             <img
               src={selectedGroup?.profile_photo}
-              className="user-profile-image w-[60px] h-[60px] rounded-full ring-2 ring-red-200 sm:w-[50px] sm:h-[50px]"
+              className="user-profile-image w-[60px] h-[60px] rounded-full ring-2 ring-red-200 sm:w-[50px] sm:h-[50px] cursor-pointer"
               key={selectedGroup?.group_id}
+              onClick={() => {
+                setModal(true);
+                setGroupId(selectedGroup?.group_id);
+              }}
             />
             {loggedInUser?.user_id === selectedGroup.user_id ? (
               <div className="flex justify-between w-[80%] sm:w-full">
@@ -302,6 +312,8 @@ export function GroupChat({
           Loading...
         </span>
       )}
+
+      {modal && <GroupInfo onClose={onClose} group_id={Number(groupid)} />}
     </>
   );
 }

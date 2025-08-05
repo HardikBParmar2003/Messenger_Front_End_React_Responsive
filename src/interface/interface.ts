@@ -28,6 +28,7 @@ export interface Group {
   profile_photo: string;
   user_id: number;
   latestMessageTime?: string;
+  createdAt? : Date
 }
 
 export interface AllGroupsProps {

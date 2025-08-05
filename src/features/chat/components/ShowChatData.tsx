@@ -173,16 +173,12 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
           }}
           aria-label="Type a message"
         />
-        <button
-          className="flex items-center justify-center bg-gray-200 p-3 rounded-full min-w-[48px] hover:bg-green-400 transition-colors duration-300"
-          onClick={sendMessage}
-          aria-label="Send Message"
-        >
-          <FontAwesomeIcon
-            icon={faPaperPlane}
-            className="text-green-800 hover:text-black transition-colors duration-300"
-          />
-        </button>
+     <button
+              className="bg-green-200 hover:bg-green-300 p-2 rounded-full flex items-center justify-center ml-2"
+              onClick={sendMessage}
+            >
+              <FontAwesomeIcon icon={faPaperPlane} className="text-green-800 p-2" />
+            </button>
       </div>
     </div>
   );

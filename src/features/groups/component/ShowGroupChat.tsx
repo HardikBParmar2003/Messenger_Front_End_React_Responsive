@@ -28,9 +28,8 @@ export function ShowGroupChat({
   const { socket } = useSocketContext();
   const { sendNotification } = useNotifictionContext();
 
-  if (!socket) {
-    return;
-  }
+  if (!socket) return;
+
   const groupChatByDate = useMemo(() => {
     const grouped: Record<string, GroupChat[]> = {};
     const sortedMessages = [...allMessages].sort(
@@ -52,21 +51,19 @@ export function ShowGroupChat({
   }, [allMessages]);
 
   function sendMessage() {
-    if (!inputMessageRef.current?.value.trim() || !socket) {
-    } else {
-      const message: string = inputMessageRef.current.value.trim();
-      const sender_id: number = Number(loggedInUser?.user_id);
-      const group_id: number = Number(selectedGroup?.group_id);
-      socket.emit(
-        "send group message",
-        sender_id,
-        group_id,
-        message,
-        selectedGroup?.group_name
-      );
-      inputMessageRef.current.value = "";
-      setInput("");
-    }
+    if (!inputMessageRef.current?.value.trim() || !socket) return;
+    const message: string = inputMessageRef.current.value.trim();
+    const sender_id: number = Number(loggedInUser?.user_id);
+    const group_id: number = Number(selectedGroup?.group_id);
+    socket.emit(
+      "send group message",
+      sender_id,
+      group_id,
+      message,
+      selectedGroup?.group_name
+    );
+    inputMessageRef.current.value = "";
+    setInput("");
   }
 
   const sortGroups = (groups: Group[]) => {
@@ -80,7 +77,6 @@ export function ShowGroupChat({
   useEffect(() => {
     if (!selectedGroup) return;
     socket.on("send group message back", (data, group_name: string) => {
-      console.log("hello");
       if (loggedInUser?.user_id != data.sender.user_id) {
         sendNotification(
           `New message from ${group_name} group by ${
@@ -147,37 +143,34 @@ export function ShowGroupChat({
     }
   }, [input]);
 
-  console.log("added remove msg is:", groupChatByDate);
   return (
-    <div className="flex flex-col h-[88%]">
+    <div className="flex flex-col h-[90%] w-full">
       <div
         ref={chatContainerRef}
-        className="flex-grow p-6 bg-gray-100 overflow-y-auto min-h-0"
+        className="flex-1 p-4 sm:p-6 bg-gray-100 overflow-y-auto max-h-[80vh] min-h-0"
       >
         {Object.entries(groupChatByDate)
           .sort(([a], [b]) => {
             const [aDay, aMonth, aYear] = a.split(" - ").map(Number);
             const [bDay, bMonth, bYear] = b.split(" - ").map(Number);
-            const dateA = new Date(aYear, aMonth - 1, aDay);
-            const dateB = new Date(bYear, bMonth - 1, bDay);
+            const dateA = new Date(aYear, aMonth, aDay);
+            const dateB = new Date(bYear, bMonth, bDay);
             return dateA.getTime() - dateB.getTime();
           })
           .map(([date, chat]) => (
             <div key={date}>
-              <span className="block w-1/6 text-center mb-4 p-1 bg-gray-300 rounded-md mx-auto font-semibold">
+              <span className="block w-fit text-center text-sm px-3 py-1 bg-gray-300 rounded-full mx-auto my-2">
                 {date}
               </span>
               {chat.map((msg, index) => {
                 const isSender = msg.sender.user_id === loggedInUser?.user_id;
                 const newDate: Date = new Date(msg.createdAt);
-                const newTime: string = `${newDate.getHours()}:${newDate
-                  .getMinutes()
-                  .toString()
-                  .padStart(2, "0")}`;
+                const newTime: string =
+                  newDate.getHours() + ":" + newDate.getMinutes();
 
                 if (msg.receiver_id && msg.group_id) {
                   return (
-                    <div key={index} className="flex justify-center my-4">
+                    <div key={index} className="flex justify-center my-2">
                       <span className="bg-yellow-200 text-sm px-3 py-1 rounded-full shadow">
                         {msg.message}
                       </span>
@@ -191,7 +184,7 @@ export function ShowGroupChat({
                       key={index}
                       className="flex mb-4 rounded-md justify-end"
                     >
-                      <div className="m-2 p-1.5 text-left bg-green-100 max-w-[70%] min-w-[10%] break-words rounded-xl">
+                      <div className="m-2 p-2 bg-green-100 max-w-[80%] sm:max-w-[70%] md:max-w-[60%] min-w-[20%] break-words rounded-xl">
                         <span>{msg.message}</span>
                         <div className="text-xs text-gray-500 mt-1 text-right">
                           {newTime}
@@ -200,16 +193,15 @@ export function ShowGroupChat({
                     </div>
                   );
                 }
-
                 return (
                   <div key={index} className="flex mb-4 mr-auto">
-                    <div className="max-w-[70%] m-2 p-1 bg-white text-left break-words min-w-[20%] rounded-xl">
-                      <div className="flex mb-2">
+                    <div className="max-w-[80%] sm:max-w-[70%] md:max-w-[60%] m-2 p-2 bg-white break-words min-w-[20%] rounded-xl">
+                      <div className="flex items-center mb-2">
                         <img
                           src={msg.sender.profile_photo}
                           className="w-5 h-5 rounded-full hover:cursor-pointer ring-2 ring-red-200"
                         />
-                        <span className="text-sm ml-1">
+                        <span className="text-sm ml-2">
                           {msg.sender.first_name} {msg.sender.last_name}
                         </span>
                       </div>
@@ -225,9 +217,9 @@ export function ShowGroupChat({
           ))}
       </div>
 
-      <div className="bg-gray-300 p-1 flex items-center space-x-3">
+      <div className="bg-gray-300 p-2 sm:p-3 mt-1 h-auto relative w-full rounded-xl">
         {selectedGroup ? (
-          <>
+          <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
             {showDropdown && (
               <ul className="absolute left-0 right-0 bottom-full mb-1 bg-white border border-gray-300 rounded-md shadow z-50 max-h-40 overflow-y-auto">
                 {tagUser.map((user) => (
@@ -236,8 +228,8 @@ export function ShowGroupChat({
                     onClick={() => {
                       setInput(
                         ` ${input} ${user.first_name} ${user.last_name}`
-                      );
-                      setShowDropdown(false);
+                      ),
+                        setShowDropdown(false);
                     }}
                     className="px-4 py-2 hover:bg-blue-100 cursor-pointer"
                   >
@@ -246,40 +238,25 @@ export function ShowGroupChat({
                 ))}
               </ul>
             )}
-            <div className="flex items-center gap-3 w-full max-w-full rounded-xl shadow-sm  p-2 bg-gray-300">
-              <input
-                type="text"
-                placeholder="ENTER MESSAGE"
-                className="
-    flex-grow  border border-gray-300 bg-white
-    focus:outline-none
-    focus:ring-offset-0
-    focus:ring-inset
-    transition
-  "
-                ref={inputMessageRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") sendMessage();
-                }}
-              />
-              <button
-                className="flex items-center justify-center bg-gray-200 p-3 rounded-full min-w-[48px] hover:bg-green-400 transition-colors duration-300"
-                onClick={sendMessage}
-                aria-label="Send Message"
-              >
-                <FontAwesomeIcon
-                  icon={faPaperPlane}
-                  className="text-green-800 hover:text-black transition-colors duration-300"
-                />
-              </button>
-            </div>
-          </>
+
+            <input
+              type="text"
+              placeholder="ENTER MESSAGE"
+              className="flex-1 p-2 rounded-2xl border bg-white w-full sm:w-auto"
+              ref={inputMessageRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+            />
+
+            <button
+              className="bg-green-200 hover:bg-green-300 p-2 rounded-full flex items-center justify-center"
+              onClick={sendMessage}
+            >
+              <FontAwesomeIcon icon={faPaperPlane} className="text-green-800 p-2" />
+            </button>
+          </div>
         ) : (
-          <span className="text-gray-500">
-            Select a group to start chatting
-          </span>
+          <span></span>
         )}
       </div>
     </div>

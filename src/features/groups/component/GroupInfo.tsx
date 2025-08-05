@@ -1,32 +1,48 @@
-import { individualUser } from "@/api/handler";
+import { getGroupData, individualUser } from "@/api/handler";
 import { LoaderComponent } from "@/components/Loader/Loader";
-import type { User } from "@/interface/interface";
+import type { Group } from "@/interface/interface";
 import { useEffect, useState } from "react";
+import { useLoggedInUserContext } from "@/features/user/hooks";
 
 export interface userProfileTypes {
   onClose: () => void;
-  userId: number;
+  group_id: number;
 }
-export function UserProfile({ onClose, userId }: userProfileTypes) {
-  const [user, setUser] = useState<User | null>(null);
+export function GroupInfo({ onClose, group_id }: userProfileTypes) {
+  const [group, setGroup] = useState<Group | null>(null);
   const [loading, setLoading] = useState(false);
+  const [date, setDate] = useState<string | null>(null);
+  const [admin, setAdmin] = useState<string | null>(null);
+  const { loggedInUser } = useLoggedInUserContext();
   useEffect(() => {
-    async function isUSer() {
+    async function isGroup() {
       try {
-        const response = await individualUser(userId);
+        const response = await getGroupData(group_id);
         if (response.data.data) {
-          setUser(response.data.data);
+          const newDate = new Date(response.data.data.createdAt);
+          setDate(
+            `${newDate.getDate()} - ${
+              newDate.getMonth() + 1
+            } -${newDate.getFullYear()}`
+          );
+          if (response.data.data.user_id == loggedInUser?.user_id) {
+            setAdmin(`${loggedInUser?.first_name} ${loggedInUser?.last_name}`);
+          }else{
+            const user = await individualUser(response.data.data.user_id)
+            setAdmin(`${user.data.data.first_name} ${user.data.data.last_name}`)
+          }
+          setGroup(response.data.data)
         } else {
-          setUser(null);
+          setGroup(null);
         }
       } catch (error) {
-        setUser(null);
+        setGroup(null);
       } finally {
         setLoading(false);
       }
     }
-    isUSer();
-  }, [userId]);
+    isGroup();
+  }, [group_id]);
   return (
     <div className="fixed inset-0 bg-opacity-30 z-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-sm relative ">
@@ -43,46 +59,50 @@ export function UserProfile({ onClose, userId }: userProfileTypes) {
             <LoaderComponent />
             <span>Loading...</span>
           </div>
-        ) : user ? (
+        ) : group ? (
           <>
-            <h2 className="text-xl font-bold text-center mb-4">User Profile</h2>
+            <h2 className="text-xl font-bold text-center mb-4">
+              Group Profile
+            </h2>
             <div className="flex justify-center mb-4">
               <img
-                src={user.profile_photo}
+                src={group.profile_photo}
                 alt="Profile"
                 className="w-32 h-32 object-cover rounded-full ring-2 ring-red-200"
               />
             </div>
             <div className="space-y-3">
               <div>
-                <label className="text-sm font-medium block mb-1">
-                  First Name
+                <label className="text-sm font-medium block mb-1 text-left">
+                  Group Name:
                 </label>
                 <input
                   type="text"
-                  value={user.first_name}
+                  value={group.group_name}
                   readOnly
                   className="w-full border px-3 py-2 rounded bg-gray-100"
                 />
               </div>
 
               <div>
-                <label className="text-sm font-medium block mb-1">
-                  Last Name
+                <label className="text-sm font-medium block mb-1 text-left">
+                  Admin Name:
                 </label>
                 <input
                   type="text"
-                  value={user.last_name}
+                  value={admin as string}
                   readOnly
                   className="w-full border px-3 py-2 rounded bg-gray-100"
                 />
               </div>
 
               <div>
-                <label className="text-sm font-medium block mb-1">Email</label>
+                <label className="text-sm font-medium block mb-1 text-left">
+                  Created Date:
+                </label>
                 <input
                   type="email"
-                  value={user.email}
+                  value={date as string}
                   readOnly
                   className="w-full border px-3 py-2 rounded bg-gray-100"
                 />
@@ -98,7 +118,7 @@ export function UserProfile({ onClose, userId }: userProfileTypes) {
             </div>
           </>
         ) : (
-          <p className="text-center text-red-500">User not found</p>
+          <p className="text-center text-red-500">Group not found</p>
         )}
       </div>
     </div>
