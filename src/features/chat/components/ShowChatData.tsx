@@ -43,6 +43,7 @@ export function ShowChatData({ ChatData, setUsers }: ChatDataTypeProps) {
       const sender_name = ((loggedInUser?.first_name as string) +
         " " +
         loggedInUser?.last_name) as string;
+        console.log("sending");
       socket.emit("send message", sender_id, receiver_id, message, sender_name);
       inputMessageRef.current.value = "";
     }
